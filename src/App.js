@@ -7,26 +7,26 @@ export default function App() {
   const [frameCount, setFrameCount] = useState(0);
   const [frames, setFrames] = useState([]);
 
-  
-
   useEffect(() => {
+    let temp = [];
     const getFrameCount = () => {
       axios
       .get("https://www.njs-export.com/collections/frames.json")
       .then(data => setFrameCount(data.data.collection.products_count))
     }
     
-    const getFrameInfo = () => {
+    const getFrameInfo = async () => {
       let pages = Math.ceil(frameCount / 30);
-      for(let i = 1; i <= 2; i++) {
-        axios
+      for(let i = 1; i <= pages; i++) {
+        await axios
           .get(`https://www.njs-export.com/collections/frames/products.json?page=${i}`)
           .then(data => {
-            console.log(data.data.products)
             console.log(i)
-            setFrames(data.data.products)
-          })
+            temp = [...temp, ...data.data.products]
+            console.log(temp);
+        })
       }
+      await setFrames(temp);
     }
 
     getFrameCount();
@@ -36,8 +36,8 @@ export default function App() {
   return(
     <div>
       <h1>NJS Export Inventory Tracker</h1>
-      {frames.map((frame) =>
-        <li key={frame.id}>
+      {frames.map((frame, i) =>
+        <li key={i}>
           {frame.title}
         </li>
       )}
