@@ -5,6 +5,7 @@ import axios from 'axios';
 
 export default function App() {
   const [frames, setFrames] = useState([]);
+  const [chainrings, setChainrings] = useState([]);
 
   useEffect(() => {
   
@@ -25,14 +26,22 @@ export default function App() {
     }
 
     getItemInfo('frames', frames, setFrames);
+    getItemInfo('chainrings', chainrings, setChainrings);
   }, [])
 
   return(
     <div>
       <h1>NJS Export Inventory Tracker</h1>
+      <h2>New Frames</h2>
       {frames.map((frame, i) =>
         <li key={i}>
           {frame.title}
+        </li>
+      )}
+      <h2>New Chainrings</h2>
+      {chainrings.map((chainring, i) =>
+        <li key={i}>
+          {chainring.title}
         </li>
       )}
     </div>
