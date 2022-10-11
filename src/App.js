@@ -3,6 +3,11 @@ import React, { useState, useEffect} from 'react';
 import axios from 'axios';
 
 
+const getCreatedDate = (component) => {
+  const date = new Date(component.created_at)
+  console.log(date);
+}
+
 export default function App() {
   const [updateDate, setUpdateDate] = useState("updating");
   const [frames, setFrames] = useState([]);
@@ -34,7 +39,6 @@ export default function App() {
 
     getLastUpdatedDate('frames');
     getComponentInfo('frames', frames, setFrames);
-    //getComponentInfo('chainrings', chainrings, setChainrings);
   }, [])
 
   return(
@@ -44,9 +48,10 @@ export default function App() {
       <ul>
         {frames.map((frame, i) =>
           <li key={i}>
+            <img src={frame.images[0].src} alt="Frame" width={250} height={200} />
+            {getCreatedDate(frame)}
             {frame.tags[1]}
             {frame.tags[0]}
-            <img src={frame.images[0].src} alt="Frame" width={250} height={200} />
           </li>
         )}
       </ul>
