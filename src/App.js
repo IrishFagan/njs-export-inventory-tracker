@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect} from 'react';
 import axios from 'axios';
 
 
@@ -43,7 +43,11 @@ export default function App() {
       <h2>{updateDate}</h2>
       {frames.map((frame, i) =>
         <li key={i}>
-          {frame.title}
+          <div>
+            {frame.tags[1]}
+            {frame.tags[0]}
+          </div>
+          <img src={frame.images[0].src} alt="Frame" width={250} height={200} />
         </li>
       )}
       <h2>New Chainrings</h2>
