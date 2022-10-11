@@ -1,25 +1,14 @@
 import './App.css';
+import Component from './components/Component';
 import React, { useState, useEffect} from 'react';
 import axios from 'axios';
 
-
-const getCreatedDate = (component) => {
-  const date = new Date(component.created_at)
-  console.log(date);
-}
-
 export default function App() {
-  const [updateDate, setUpdateDate] = useState("updating");
+  const [todayDate, setTodayDate] = useState(new Date('2013-06-18').setHours(0,0,0,0));
   const [frames, setFrames] = useState([]);
   const [chainrings, setChainrings] = useState([]);
 
   useEffect(() => {
-
-    const getLastUpdatedDate = async (componentName) => {
-      await axios
-        .get(`https://www.njs-export.com/collections/${componentName}.json`)
-        .then(res => setUpdateDate(`${componentName} last updated at ${res.data.collection.updated_at}`));
-    }
   
     const getComponentCount = async (componentName) => {
       return axios
@@ -37,30 +26,23 @@ export default function App() {
       }
     }
 
-    getLastUpdatedDate('frames');
     getComponentInfo('frames', frames, setFrames);
+    getComponentInfo('chainrings', chainrings, setChainrings);
   }, [])
 
   return(
     <div>
       <h1>NJS Export Inventory Tracker</h1>
-      <h2>{updateDate}</h2>
+      <h2>frames</h2>
       <ul>
-        {frames.map((frame, i) =>
-          <li key={i}>
-            <img src={frame.images[0].src} alt="Frame" width={250} height={200} />
-            {getCreatedDate(frame)}
-            {frame.tags[1]}
-            {frame.tags[0]}
-          </li>
+        {frames.map((component, i) =>
+          <Component
+            component={component}
+            index={i}
+            todayDate={todayDate}
+          />
         )}
       </ul>
-      <h2>New Chainrings</h2>
-      {chainrings.map((chainring, i) =>
-        <li key={i}>
-          {chainring.title}
-        </li>
-      )}
     </div>
   );
 }
