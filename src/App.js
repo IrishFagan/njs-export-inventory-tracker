@@ -4,32 +4,27 @@ import axios from 'axios';
 
 
 export default function App() {
-  const [frameCount, setFrameCount] = useState(0);
   const [frames, setFrames] = useState([]);
 
   useEffect(() => {
-    let temp = [];
-    const getFrameCount = () => {
-      axios
-      .get("https://www.njs-export.com/collections/frames.json")
-      .then(data => setFrameCount(data.data.collection.products_count))
+  
+    const getFrameCount = async () => {
+      const frameData = await axios
+        .get("https://www.njs-export.com/collections/frames.json")
+      const filteredFrameData = frameData.data.collection.products_count;
+      return filteredFrameData
     }
     
     const getFrameInfo = async () => {
-      let pages = Math.ceil(frameCount / 30);
+      const frameCount = await getFrameCount()
+      const pages = await Math.ceil(frameCount / 30);
       for(let i = 1; i <= pages; i++) {
-        await axios
-          .get(`https://www.njs-export.com/collections/frames/products.json?page=${i}`)
-          .then(data => {
-            console.log(i)
-            temp = [...temp, ...data.data.products]
-            console.log(temp);
-        })
+        const response = await axios.get(`https://www.njs-export.com/collections/frames/products.json?page=${i}`)
+        const filteredResponse = response.data.products
+        setFrames(frames => [...frames, ...filteredResponse])
       }
-      await setFrames(temp);
     }
 
-    getFrameCount();
     getFrameInfo();
   }, [])
 
