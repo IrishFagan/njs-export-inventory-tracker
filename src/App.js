@@ -41,15 +41,15 @@ export default function App() {
     <div>
       <h1>NJS Export Inventory Tracker</h1>
       <h2>{updateDate}</h2>
-      {frames.map((frame, i) =>
-        <li key={i}>
-          <div>
+      <ul>
+        {frames.map((frame, i) =>
+          <li key={i}>
             {frame.tags[1]}
             {frame.tags[0]}
-          </div>
-          <img src={frame.images[0].src} alt="Frame" width={250} height={200} />
-        </li>
-      )}
+            <img src={frame.images[0].src} alt="Frame" width={250} height={200} />
+          </li>
+        )}
+      </ul>
       <h2>New Chainrings</h2>
       {chainrings.map((chainring, i) =>
         <li key={i}>
