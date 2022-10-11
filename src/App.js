@@ -19,14 +19,14 @@ export default function App() {
       const pages = await Math.ceil(await getItemCount(itemName) / 30);
       setItem([])
       for(let i = 1; i <= pages; i++) {
-        const response = await axios.get(`https://www.njs-export.com/collections/${itemName}/products.json?page=${i}`)
-        const filteredResponse = response.data.products;
-        setItem(item => [...item, ...filteredResponse])
+        await axios
+          .get(`https://www.njs-export.com/collections/${itemName}/products.json?page=${i}`)
+          .then(res => setItem(item => [...item, ...res.data.products]))
       }
     }
 
     getItemInfo('frames', frames, setFrames);
-    getItemInfo('chainrings', chainrings, setChainrings);
+    //getItemInfo('chainrings', chainrings, setChainrings);
   }, [])
 
   return(
