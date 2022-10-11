@@ -12,13 +12,11 @@ export default function App() {
       return axios
         .get("https://www.njs-export.com/collections/frames.json")
         .then(res => res.data.collection.products_count);
-      //const filteredFrameData = frameData.data.collection.products_count;
-      //return filteredFrameData
     }
     
     const getFrameInfo = async () => {
-      const frameCount = await getFrameCount()
-      const pages = await Math.ceil(frameCount / 30);
+      const pages = await Math.ceil(await getFrameCount() / 30);
+      setFrames([])
       for(let i = 1; i <= pages; i++) {
         const response = await axios.get(`https://www.njs-export.com/collections/frames/products.json?page=${i}`)
         const filteredResponse = response.data.products
