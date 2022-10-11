@@ -1,4 +1,4 @@
-export default function Component({component, key, todayDate}) {
+export default function Component({component, index, todayDate}) {
 
 	const getCreatedDate = (component) => {
 	  const date = new Date(component.created_at)
@@ -7,14 +7,11 @@ export default function Component({component, key, todayDate}) {
 
 	if(getCreatedDate(component) === todayDate) {
 		return(
-			<li key={key}>
+			<li key={index}>
   		  <img src={component.images[0].src} alt="Frame" width={250} height={200} />
-  		  {getCreatedDate(component)}
   		  {component.tags[1]}
   		  {component.tags[0]}
   		</li>
 		)
-	} else {
-		
 	}
 }
