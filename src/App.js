@@ -4,35 +4,43 @@ import axios from 'axios';
 
 
 export default function App() {
+  const [updateDate, setUpdateDate] = useState("updating");
   const [frames, setFrames] = useState([]);
   const [chainrings, setChainrings] = useState([]);
 
   useEffect(() => {
+
+    const getLastUpdatedDate = async (componentName) => {
+      await axios
+        .get(`https://www.njs-export.com/collections/${componentName}.json`)
+        .then(res => setUpdateDate(`${componentName} last updated at ${res.data.collection.updated_at}`));
+    }
   
-    const getItemCount = async (itemName) => {
+    const getComponentCount = async (componentName) => {
       return axios
-        .get(`https://www.njs-export.com/collections/${itemName}.json`)
+        .get(`https://www.njs-export.com/collections/${componentName}.json`)
         .then(res => res.data.collection.products_count);
     }
     
-    const getItemInfo = async (itemName, item, setItem) => {
-      const pages = await Math.ceil(await getItemCount(itemName) / 30);
-      setItem([])
+    const getComponentInfo = async (componentName, component, setComponent) => {
+      const pages = await Math.ceil(await getComponentCount(componentName) / 30);
+      setComponent([])
       for(let i = 1; i <= pages; i++) {
         await axios
-          .get(`https://www.njs-export.com/collections/${itemName}/products.json?page=${i}`)
-          .then(res => setItem(item => [...item, ...res.data.products]))
+          .get(`https://www.njs-export.com/collections/${componentName}/products.json?page=${i}`)
+          .then(res => setComponent(component => [...component, ...res.data.products]))
       }
     }
 
-    getItemInfo('frames', frames, setFrames);
-    //getItemInfo('chainrings', chainrings, setChainrings);
+    getLastUpdatedDate('frames');
+    getComponentInfo('frames', frames, setFrames);
+    //getComponentInfo('chainrings', chainrings, setChainrings);
   }, [])
 
   return(
     <div>
       <h1>NJS Export Inventory Tracker</h1>
-      <h2>New Frames</h2>
+      <h2>{updateDate}</h2>
       {frames.map((frame, i) =>
         <li key={i}>
           {frame.title}
