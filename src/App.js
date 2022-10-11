@@ -9,10 +9,11 @@ export default function App() {
   useEffect(() => {
   
     const getFrameCount = async () => {
-      const frameData = await axios
+      return axios
         .get("https://www.njs-export.com/collections/frames.json")
-      const filteredFrameData = frameData.data.collection.products_count;
-      return filteredFrameData
+        .then(res => res.data.collection.products_count);
+      //const filteredFrameData = frameData.data.collection.products_count;
+      //return filteredFrameData
     }
     
     const getFrameInfo = async () => {
