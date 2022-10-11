@@ -40,9 +40,12 @@
 ul {
   flex-wrap: wrap;
   display:  flex;
+  list-style:  none;
 }
 
 li {
   width: 33.33%;
   float:  left;
+  text-align: center;
+  margin-bottom: 20px;
 }
