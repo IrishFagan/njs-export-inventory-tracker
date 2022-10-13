@@ -4,7 +4,7 @@ import React, { useState, useEffect} from 'react';
 import axios from 'axios';
 
 export default function App() {
-  const [todayDate, setTodayDate] = useState(new Date('2013-06-18').setHours(0,0,0,0));
+  const [todayDate, setTodayDate] = useState(new Date('2013-06-18'));
   const [frames, setFrames] = useState([]);
   const [chainrings, setChainrings] = useState([]);
 
@@ -36,6 +36,11 @@ export default function App() {
       <ComponentList
         component={frames}
         componentName="frames"
+        todayDate={todayDate}
+      />
+      <ComponentList
+        component={chainrings}
+        componentName="chainrings"
         todayDate={todayDate}
       />
     </div>
