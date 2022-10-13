@@ -1,5 +1,5 @@
 import './App.css';
-import Component from './components/Component';
+import ComponentList from './components/ComponentList';
 import React, { useState, useEffect} from 'react';
 import axios from 'axios';
 
@@ -33,16 +33,11 @@ export default function App() {
   return(
     <div>
       <h1>NJS Export Inventory Tracker</h1>
-      <h2>frames</h2>
-      <ul>
-        {frames.map((component, i) =>
-          <Component
-            component={component}
-            index={i}
-            todayDate={todayDate}
-          />
-        )}
-      </ul>
+      <ComponentList
+        component={frames}
+        componentName="frames"
+        todayDate={todayDate}
+      />
     </div>
   );
 }
