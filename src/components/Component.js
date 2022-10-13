@@ -1,11 +1,11 @@
 export default function Component({component, index, todayDate}) {
 
-	const getCreatedDate = (component) => {
+	const CreatedDate = (component) => {
 	  const date = new Date(component.created_at)
 	  return date.setHours(0,0,0,0);
 	}
 
-	if(getCreatedDate(component) === todayDate) {
+	if(CreatedDate(component) === todayDate.setHours(0,0,0,0)) {
 		return(
 			<li key={index}>
   		  <img src={component.images[0].src} alt="Frame" width={250} height={200} />
