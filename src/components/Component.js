@@ -9,7 +9,9 @@ export default function Component({component, index, listingDate}) {
 		return(
 			<li key={index}>
   		  <img src={component.images[0].src} alt="Frame" width={250} height={200} />
-  		  {component.tags[1]}
+  		  <div>
+  		  	{component.tags[1]}
+  		  </div>
   		  {component.tags[0]}
   		</li>
 		)
