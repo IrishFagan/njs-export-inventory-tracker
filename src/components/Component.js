@@ -6,7 +6,6 @@ export default function Component({component, index, listingDate}) {
 	}
 
 	if(CreatedDate(component) === listingDate.toDateString()) {
-	  console.log(`${CreatedDate(component)} - ${listingDate.toDateString()}`)
 		return(
 			<li key={index}>
   		  <img src={component.images[0].src} alt="Frame" width={250} height={200} />
