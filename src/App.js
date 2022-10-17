@@ -39,6 +39,11 @@ export default function App() {
     <div>
       <div>
         <button onClick={handleOpenList}>{listingDate.toDateString()}</button>
+        {openList ? (
+          <ul>
+            {frames.map((frame, index) => <li>{(new Date(frame.created_at)).toDateString()}</li>)}
+          </ul>
+        ) : null}
       </div>
       <h1>NJS Export Inventory Tracker</h1>
       <ComponentList

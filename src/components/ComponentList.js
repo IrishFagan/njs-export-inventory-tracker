@@ -1,4 +1,3 @@
-import './../App.css'
 import Component from './Component';
 
 export default function ComponentList({componentName, component, listingDate}) {
