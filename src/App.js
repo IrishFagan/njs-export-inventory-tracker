@@ -4,14 +4,16 @@ import React, { useState, useEffect} from 'react';
 import axios from 'axios';
 
 export default function App() {
+  const [openList, setOpenList] = useState(false);
   const [listingDate, setListingDate] = useState(new Date(/*2013-06-18'*/));
   const [frames, setFrames] = useState([]);
   const [chainrings, setChainrings] = useState([]);
 
-  useEffect(() => {
+  const handleOpenList = () => {
+    setOpenList(!openList);
+  }
 
-    const dog = new Date('2022/10/17')
-    console.log(dog.toDateString())
+  useEffect(() => {
 
     const getComponentCount = async (componentName) => {
       return axios
@@ -35,6 +37,9 @@ export default function App() {
 
   return(
     <div>
+      <div>
+        <button onClick={handleOpenList}>{listingDate.toDateString()}</button>
+      </div>
       <h1>NJS Export Inventory Tracker</h1>
       <ComponentList
         component={frames}
