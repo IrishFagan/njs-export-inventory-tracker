@@ -4,12 +4,15 @@ import React, { useState, useEffect} from 'react';
 import axios from 'axios';
 
 export default function App() {
-  const [listingDate, setTodayDate] = useState(new Date('2013-06-18'));
+  const [listingDate, setListingDate] = useState(new Date(/*2013-06-18'*/));
   const [frames, setFrames] = useState([]);
   const [chainrings, setChainrings] = useState([]);
 
   useEffect(() => {
-  
+
+    const dog = new Date('2022/10/17')
+    console.log(dog.toDateString())
+
     const getComponentCount = async (componentName) => {
       return axios
         .get(`https://www.njs-export.com/collections/${componentName}.json`)
