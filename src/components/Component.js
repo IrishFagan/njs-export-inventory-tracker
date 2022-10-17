@@ -1,3 +1,5 @@
+import './../App.css'
+
 export default function Component({component, index, listingDate}) {
 
 	const CreatedDate = (component) => {
@@ -7,7 +9,7 @@ export default function Component({component, index, listingDate}) {
 
 	if(CreatedDate(component) === listingDate.toDateString()) {
 		return(
-			<li key={index}>
+			<li className="list" key={index}>
 				<a href={`https://www.njs-export.com/products/${component.handle}`}>
 	  		  <img src={component.images[0].src} alt="Frame" width={250} height={200} />
 	  		</a>

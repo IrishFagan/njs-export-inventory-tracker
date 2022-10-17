@@ -6,6 +6,7 @@ import axios from 'axios';
 export default function App() {
   const [openList, setOpenList] = useState(false);
   const [listingDate, setListingDate] = useState(new Date(/*2013-06-18'*/));
+  const [dates, setDates] = useState([]);
   const [frames, setFrames] = useState([]);
   const [chainrings, setChainrings] = useState([]);
 
@@ -31,13 +32,17 @@ export default function App() {
       }
     }
 
+    const getComponentDate = async (components, setDates) => {
+      setDates([]);
+    }
+
     getComponentInfo('frames', frames, setFrames);
     getComponentInfo('chainrings', chainrings, setChainrings);
   }, [])
 
   return(
     <div>
-      <div>
+      <div className="scrollableList">
         <button onClick={handleOpenList}>{listingDate.toDateString()}</button>
         {openList ? (
           <ul>
