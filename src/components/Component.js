@@ -8,7 +8,9 @@ export default function Component({component, index, listingDate}) {
 	if(CreatedDate(component) === listingDate.toDateString()) {
 		return(
 			<li key={index}>
-  		  <img src={component.images[0].src} alt="Frame" width={250} height={200} />
+				<a href={`https://www.njs-export.com/products/${component.handle}`}>
+	  		  <img src={component.images[0].src} alt="Frame" width={250} height={200} />
+	  		</a>
   		  <div>
   		   	{component.tags[1]}
   		  </div>
