@@ -8,6 +8,7 @@ export default function App() {
   const [listingDate, setListingDate] = useState(new Date(/*2013-06-18'*/));
   const [frames, setFrames] = useState([]);
   const [chainrings, setChainrings] = useState([]);
+  const [stems, setStems] = useState([]);
 
   const handleOpenList = () => {
     setOpenList(!openList);
@@ -37,6 +38,7 @@ export default function App() {
 
     getComponentInfo('frames', frames, setFrames);
     getComponentInfo('chainrings', chainrings, setChainrings);
+    getComponentInfo('stems', stems, setStems);
   }, [])
 
   return(
@@ -46,7 +48,7 @@ export default function App() {
         {openList ? (
           <div>
             {frames.map((frame, index) => (
-              <li onClick={() => {setListingDate(new Date(frame.created_at))}}>{(new Date(frame.created_at)).toDateString()}</li>
+              <li onClick={() => {setListingDate(new Date(frame.created_at.replace(/-/g, '\/').replace(/T.+/, '')))}}>{(new Date(frame.created_at.replace(/-/g, '\/').replace(/T.+/, ''))).toDateString()}</li>
             ))}
           </div>
         ) : null}
@@ -60,6 +62,11 @@ export default function App() {
       <ComponentList
         component={chainrings}
         componentName="chainrings"
+        listingDate={listingDate}
+      />
+      <ComponentList
+        component={stems}
+        componentName="stems"
         listingDate={listingDate}
       />
     </div>
