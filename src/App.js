@@ -34,7 +34,9 @@ export default function App() {
           .get(`https://www.njs-export.com/collections/${componentName}/products.json?page=${i}`)
           .then(res => setComponent(component => [...component, ...res.data.products]))
       }
+      setComponent(component.sort((a,b) => new Date(b.created_at) - new Date(a.created_at)))
     }
+    
 
     getComponentInfo('frames', frames, setFrames);
     getComponentInfo('chainrings', chainrings, setChainrings);
