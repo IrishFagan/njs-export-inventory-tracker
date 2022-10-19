@@ -1,10 +1,11 @@
-import './App.css';
-import ComponentList from './components/ComponentList';
 import React, { useState, useEffect} from 'react';
 import axios from 'axios';
+import './App.css';
+import ComponentList from './components/ComponentList';
+//import DateSelector from './components/DateSelector';
 
 export default function App() {
-  const [openList, setOpenList] = useState(true);
+  const [openList, setOpenList] = useState(false);
   const [listingDate, setListingDate] = useState(new Date(/*2013-06-18'*/));
   const [frames, setFrames] = useState([]);
   const [chainrings, setChainrings] = useState([]);
@@ -18,8 +19,12 @@ export default function App() {
     setListingDate(new Date(date))
   }
 
-  useEffect(() => {
+  const sortByDate = (components) => {
+    return components.sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
+  }
 
+  useEffect(() => {
+    
     const getComponentCount = async (componentName) => {
       return axios
         .get(`https://www.njs-export.com/collections/${componentName}.json`)
@@ -28,19 +33,16 @@ export default function App() {
     
     const getComponentInfo = async (componentName, component, setComponent) => {
       const pages = await Math.ceil(await getComponentCount(componentName) / 30);
-      setComponent([])
+      await setComponent([])
       for(let i = 1; i <= pages; i++) {
         await axios
           .get(`https://www.njs-export.com/collections/${componentName}/products.json?page=${i}`)
-          .then(res => setComponent(component => [...component, ...res.data.products]))
+          .then(res => setComponent(component => [...sortByDate(component), ...res.data.products]))
       }
-      setComponent(component.sort((a,b) => new Date(b.created_at) - new Date(a.created_at)))
     }
-    
 
     getComponentInfo('frames', frames, setFrames);
-    getComponentInfo('chainrings', chainrings, setChainrings);
-    getComponentInfo('stems', stems, setStems);
+    //getComponentInfo('chainrings', chainrings, setChainrings);
   }, [])
 
   return(
