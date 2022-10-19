@@ -4,14 +4,17 @@ import React, { useState, useEffect} from 'react';
 import axios from 'axios';
 
 export default function App() {
-  const [openList, setOpenList] = useState(false);
+  const [openList, setOpenList] = useState(true);
   const [listingDate, setListingDate] = useState(new Date(/*2013-06-18'*/));
-  const [dates, setDates] = useState([]);
   const [frames, setFrames] = useState([]);
   const [chainrings, setChainrings] = useState([]);
 
   const handleOpenList = () => {
     setOpenList(!openList);
+  }
+
+  const handleClick = (date) => {
+    setListingDate(new Date(date))
   }
 
   useEffect(() => {
@@ -32,22 +35,20 @@ export default function App() {
       }
     }
 
-    const getComponentDate = async (components, setDates) => {
-      setDates([]);
-    }
-
     getComponentInfo('frames', frames, setFrames);
     getComponentInfo('chainrings', chainrings, setChainrings);
   }, [])
 
   return(
     <div>
-      <div className="scrollableList">
+      <div>
         <button onClick={handleOpenList}>{listingDate.toDateString()}</button>
         {openList ? (
-          <ul>
-            {frames.map((frame, index) => <li>{(new Date(frame.created_at)).toDateString()}</li>)}
-          </ul>
+          <div>
+            {frames.map((frame, index) => (
+              <li onClick={() => {setListingDate(new Date(frame.created_at))}}>{(new Date(frame.created_at)).toDateString()}</li>
+            ))}
+          </div>
         ) : null}
       </div>
       <h1>NJS Export Inventory Tracker</h1>
