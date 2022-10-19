@@ -14,9 +14,9 @@ export default function Component({component, index, listingDate}) {
 	  		  <img src={component.images[0].src} alt="Frame" width={250} height={200} />
 	  		</a>
   		  <div>
-  		   	{component.tags[1]}
+  		   	{component.title}
   		  </div>
-  		  {component.tags[0]}
+  		  {component.variants[0].available ? null : "SOLD OUT"}
   		</li>
 		)
 	}
