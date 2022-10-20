@@ -11,16 +11,15 @@ export default function DateSelector({setListingDate, listingDate, frames}) {
     setListingDate(new Date(date))
   }
 
-
   return (
     <div>
       <button onClick={handleOpenList}>{listingDate.toDateString()}</button>
       {openList ? (
-        <div>
+        <ui className="dropdown">
           {frames.map((frame, index) => (
-            <li onClick={() => {setListingDate(new Date(frame.created_at.replace(/-/g, '\/').replace(/T.+/, '')))}}>{(new Date(frame.created_at.replace(/-/g, '\/').replace(/T.+/, ''))).toDateString()}</li>
+            <li className="dropdown-item" onClick={() => {setListingDate(new Date(frame.created_at.replace(/-/g, '\/').replace(/T.+/, '')))}}>{(new Date(frame.created_at.replace(/-/g, '\/').replace(/T.+/, ''))).toDateString()}</li>
           ))}
-        </div>
+        </ui>
       ) : null}
     </div>
   )
