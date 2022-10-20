@@ -38,25 +38,25 @@ export default function App() {
 
   return(
     <div>
+      <h1>NJS Export Inventory Tracker</h1>
       <DateSelector
         setListingDate={setListingDate}
         listingDate={listingDate}
         frames={frames}
       />
-      <h1>NJS Export Inventory Tracker</h1>
       <ComponentList
         component={frames}
-        componentName="frames"
+        componentName="Frames"
         listingDate={listingDate}
       />
       <ComponentList
         component={chainrings}
-        componentName="chainrings"
+        componentName="Chainrings"
         listingDate={listingDate}
       />
       <ComponentList
         component={stems}
-        componentName="stems"
+        componentName="Stems"
         listingDate={listingDate}
       />
     </div>

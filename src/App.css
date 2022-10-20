@@ -43,11 +43,9 @@ h1 {
   -webkit-text-fill-color: white;
 }
 
-button {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+h2 {
+  text-align: center;
+  text-decoration: underline;
 }
 
 ul {
@@ -68,4 +66,28 @@ li {
   float:  left;
   text-align: center;
   margin-bottom: 30px;
+}
+
+.dropdown {
+  position: absolute;
+  list-style-type:  none;
+  width: 10%;
+  padding-left: 10%;
+}
+
+.dropdown > .dropdown-item {
+  background-color: grey;
+  list-style-type: none;
+  border: 1px solid black;
+  border-radius: 3px;
+  margin-bottom: 2px;
+}
+
+button  {
+  margin-left: 10%;
+  width:  10%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
