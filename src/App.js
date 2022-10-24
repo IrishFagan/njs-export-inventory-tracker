@@ -9,6 +9,7 @@ export default function App() {
   const [frames, setFrames] = useState([]);
   const [chainrings, setChainrings] = useState([]);
   const [stems, setStems] = useState([]);
+  const [cranks, setCranks] = useState([]);
 
   const sortByDate = (components) => {
     return components.sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
@@ -34,6 +35,8 @@ export default function App() {
 
     getComponentInfo('frames', frames, setFrames);
     getComponentInfo('chainrings', chainrings, setChainrings);
+    getComponentInfo('stems', stems, setStems);
+    getComponentInfo('cranks', cranks, setCranks);
   }, [])
 
   return(
@@ -57,6 +60,11 @@ export default function App() {
       <ComponentList
         component={stems}
         componentName="Stems"
+        listingDate={listingDate}
+      />
+      <ComponentList
+        component={cranks}
+        componentName="Cranks"
         listingDate={listingDate}
       />
     </div>
