@@ -28,6 +28,13 @@ functions:
           path: /frames
           method: get
           cors: true
+  chainrings:
+    timeout: 60
+    handler: handler.chainrings
+    events:
+      - httpApi:
+          path: /chainrings
+          method: get
 
 package:
   exclude:

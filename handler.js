@@ -8,14 +8,32 @@ const getComponentCount = async (componentName) => {
 }
 
 const getComponentInfo = async (componentName) => {
-  var frames = [];
+  var components = [];
   const pages = await Math.ceil(await getComponentCount(componentName) / 30);
   for(let i = 1; i <= pages; i++) {
     await axios
       .get(`https://www.njs-export.com/collections/${componentName}/products.json?page=${i}`)
-      .then(res => res.data.products.forEach((frame) => frames.push(frame)))
+      .then(res => res.data.products.forEach((component) => components.push(component)))
   }
-  return frames;
+  return components;
+}
+
+const formattedComponent = async (componentName) => {
+  const components = await getComponentInfo(componentName);
+  const componentData = []
+
+  await components.forEach((component) => {
+    componentData.push({
+      title: component.title,
+      handle: component.handle,
+      created_at: component.created_at,
+      image: component.images[0].src,
+      available: component.variants[0].available,
+      price: component.variants[0].price
+    })
+  })
+
+  return componentData;
 }
 
 module.exports.frameCount = async (event) => {
@@ -32,28 +50,27 @@ module.exports.frameCount = async (event) => {
 };
 
 module.exports.frames = async (event) => {
-  const frames = await getComponentInfo('frames')
-  var frameData = []
-
-  await frames.forEach((frame) => {
-    frameData.push({
-      title: frame.title,
-      handle: frame.handle,
-      created_at: frame.created_at,
-      image: frame.images[0].src,
-      available: frame.variants[0].available,
-      price: frame.variants[0].price
-    })
-  })
-
   return {
     statusCode: 200,
     body: JSON.stringify(
     {
-      frames: frameData
+      componentData: await formattedComponent('frames')
     },
     null,
     2
     ),
+  }
+}
+
+module.exports.chainrings = async (event) => {
+  return {
+    statusCode: 200,
+    body: JSON.stringify(
+    {
+      componentData: await formattedComponent('chainrings')
+    },
+    null,
+    2
+    )
   }
 }
