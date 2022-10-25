@@ -15,14 +15,15 @@ functions:
       - httpApi:
           path: /
           method: get
-  manage-frame-inventory:
-    handler: handler.manage-frame-inventory
+  manageFrameInventory:
+    handler: handler.manageFrameInventory
     events:
       - s3:
         bucket: njs-inventory
       - httpApi:
           path: /frames
           method: get
+          cors: true
 
 package:
   exclude:
