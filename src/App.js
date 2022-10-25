@@ -10,6 +10,7 @@ export default function App() {
   const [chainrings, setChainrings] = useState([]);
   const [stems, setStems] = useState([]);
   const [cranks, setCranks] = useState([]);
+  const [hubs, setHubs] = useState([]);
 
   const sortByDate = (components) => {
     return components.sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
@@ -19,24 +20,17 @@ export default function App() {
     
     const getComponentCount = async (componentName) => {
       return axios
-        .get(`https://www.njs-export.com/collections/${componentName}.json`)
-        .then(res => res.data.collection.products_count);
+        .get(`https://xdooj1w64j.execute-api.us-west-2.amazonaws.com/${componentName}/count`)
+        .then(res => res.data.count);
     }
     
     const getComponentInfo = async (componentName, component, setComponent) => {
-      const pages = await Math.ceil(await getComponentCount(componentName) / 30);
-      await setComponent([])
-      for(let i = 1; i <= pages; i++) {
-        await axios
-          .get(`https://www.njs-export.com/collections/${componentName}/products.json?page=${i}`)
-          .then(res => setComponent(component => [...sortByDate(component), ...res.data.products]))
-      }
+      return axios
+        .get('https://xdooj1w64j.execute-api.us-west-2.amazonaws.com/frames')
+        .then(res => setComponent(res.data.frames));
     }
 
     getComponentInfo('frames', frames, setFrames);
-    getComponentInfo('chainrings', chainrings, setChainrings);
-    getComponentInfo('stems', stems, setStems);
-    getComponentInfo('cranks', cranks, setCranks);
   }, [])
 
   return(
@@ -50,21 +44,6 @@ export default function App() {
       <ComponentList
         component={frames}
         componentName="Frames"
-        listingDate={listingDate}
-      />
-      <ComponentList
-        component={chainrings}
-        componentName="Chainrings"
-        listingDate={listingDate}
-      />
-      <ComponentList
-        component={stems}
-        componentName="Stems"
-        listingDate={listingDate}
-      />
-      <ComponentList
-        component={cranks}
-        componentName="Cranks"
         listingDate={listingDate}
       />
     </div>
