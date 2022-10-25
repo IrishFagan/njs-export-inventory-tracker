@@ -23,6 +23,7 @@ functions:
           method: get
           cors: true
   frames:
+    timeout: 60
     handler: handler.frames
     events:
       - s3:
