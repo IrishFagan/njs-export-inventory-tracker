@@ -9,6 +9,8 @@ provider:
   region: us-west-2
   httpApi:
     cors: true
+  layers:
+    - arn:aws:lambda:us-west-2:740451665580:layer:axiosLayer:2
 
 functions:
   frameCount:
@@ -18,7 +20,7 @@ functions:
           path: /frames/count
           method: get
   frames:
-    timeout: 60
+    timeout: 30
     handler: handler.frames
     events:
       - s3:
@@ -27,7 +29,7 @@ functions:
           path: /frames
           method: get
   chainrings:
-    timeout: 60
+    timeout: 30
     handler: handler.chainrings
     events:
       - httpApi:
