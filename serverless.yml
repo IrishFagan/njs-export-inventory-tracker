@@ -15,13 +15,20 @@ functions:
       - httpApi:
           path: /
           method: get
-  manageFrameInventory:
-    handler: handler.manageFrameInventory
+  frameCount:
+    handler: handler.frameCount
     events:
-      - s3:
-        bucket: njs-inventory
       - httpApi:
           path: /frames/count
+          method: get
+          cors: true
+  frames:
+    handler: handler.frames
+    events:
+      - s3:
+          bucket: njs-inventory
+      - httpApi:
+          path: /frames
           method: get
           cors: true
 
