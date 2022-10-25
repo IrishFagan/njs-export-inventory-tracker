@@ -1,5 +1,4 @@
 "use strict";
-const axios = require('axios');
 
 const getComponentCount = async (componentName) => {
   return axios
@@ -33,3 +32,16 @@ module.exports.frameCount = async (event) => {
     ),
   };
 };
+
+module.exports.frames = async (event) => {
+  return {
+    statusCode: 200,
+    body: JSON.stringify(
+    {
+      frames: "frame :)"
+    },
+    null,
+    2
+    ),
+  }
+}
