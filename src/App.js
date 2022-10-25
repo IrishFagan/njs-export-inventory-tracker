@@ -20,7 +20,7 @@ export default function App() {
     
     const getComponentInfo = async (componentName, component, setComponent) => {
       return axios
-        .get('https://xdooj1w64j.execute-api.us-west-2.amazonaws.com/frames')
+        .get(`https://v3ory7fu51.execute-api.us-west-2.amazonaws.com/${componentName}`)
         .then(res => setComponent(res.data.frames));
     }
 
