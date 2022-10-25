@@ -21,7 +21,7 @@ module.exports.hello = async (event) => {
   };
 };
 
-module.exports.manageFrameInventory = async (event) => {
+module.exports.frameCount = async (event) => {
   return {
     statusCode: 200,
     body: JSON.stringify(

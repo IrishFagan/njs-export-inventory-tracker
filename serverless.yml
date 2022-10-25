@@ -21,7 +21,7 @@ functions:
       - s3:
         bucket: njs-inventory
       - httpApi:
-          path: /frames
+          path: /frames/count
           method: get
           cors: true
 
