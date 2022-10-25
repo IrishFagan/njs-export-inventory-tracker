@@ -11,12 +11,6 @@ provider:
     cors: true
 
 functions:
-  hello:
-    handler: handler.hello
-    events:
-      - httpApi:
-          path: /
-          method: get
   frameCount:
     handler: handler.frameCount
     events:
