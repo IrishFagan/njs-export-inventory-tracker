@@ -10,10 +10,10 @@ const getComponentCount = async (componentName) => {
 const getComponentInfo = async (componentName) => {
   var frames = [];
   const pages = await Math.ceil(await getComponentCount(componentName) / 30);
-  for(let i = 1; i <= 5; i++) {
+  for(let i = 1; i <= pages; i++) {
     await axios
       .get(`https://www.njs-export.com/collections/${componentName}/products.json?page=${i}`)
-      .then(res => frames.push(res.data.products))
+      .then(res => res.data.products.forEach((frame) => frames.push(frame)))
   }
   return frames;
 }
@@ -46,11 +46,25 @@ module.exports.frameCount = async (event) => {
 };
 
 module.exports.frames = async (event) => {
+  const frames = await getComponentInfo('frames')
+  var frameData = []
+
+  await frames.forEach((frame) => {
+    frameData.push({
+      title: frame.title,
+      handle: frame.handle,
+      created_at: frame.created_at,
+      image: frame.images[0].src,
+      available: frame.variants[0].available,
+      price: frame.variants[0].price
+    })
+  })
+
   return {
     statusCode: 200,
     body: JSON.stringify(
     {
-      frames: await getComponentInfo('frames')
+      frames: frameData
     },
     null,
     2
