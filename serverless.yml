@@ -35,12 +35,33 @@ functions:
       - httpApi:
           path: /chainrings
           method: get
+  cranks:
+    timeout: 30
+    handler: handler.cranks
+    events:
+      - httpApi:
+          path: /cranks
+          method: get
+  hubs:
+    timeout: 30
+    handler: handler.hubs
+    events:
+      - httpApi:
+          path: /hubs
+          method: get
   stems:
     timeout: 30
     handler: handler.stems
     events:
       - httpApi:
           path: /stems
+          method: get
+  handlebars:
+    timeout: 30
+    handler: handler.handlebars
+    events:
+      - httpApi:
+          path: /handlebars
           method: get
 
 package:
