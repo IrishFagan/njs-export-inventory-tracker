@@ -1,5 +1,6 @@
 import {useState} from 'react';
 import Calendar from 'react-calendar';
+import styles from './../App.css'
 import 'react-calendar/dist/Calendar.css';
 
 export default function DateSelector({setListingDate, listingDate, frames}) {
@@ -15,11 +16,14 @@ export default function DateSelector({setListingDate, listingDate, frames}) {
 
   return (
     <div>
-      <button onClick={handleOpenList}>{listingDate.toDateString()}</button>
+      <button 
+        onClick={handleOpenList}>{listingDate.toDateString()}
+      </button>
       {openList ? (
         <Calendar 
           onChange={handleClick}
           value={listingDate}
+          className="Calendar"
         />
       ) : null}
     </div>
