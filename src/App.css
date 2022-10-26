@@ -68,26 +68,22 @@ li {
   margin-bottom: 30px;
 }
 
-.dropdown {
-  position: absolute;
-  list-style-type:  none;
-  width: 10%;
-  padding-left: 10%;
-}
-
-.dropdown > .dropdown-item {
-  background-color: grey;
-  list-style-type: none;
-  border: 1px solid black;
-  border-radius: 3px;
-  margin-bottom: 2px;
-}
-
 button  {
-  margin-left: 10%;
-  width:  10%;
+  margin-left: auto;
+  margin-right: auto;
+  width:  19%;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.Calendar {
+  position: absolute;
+  align-self: right;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  width: auto;
 }
