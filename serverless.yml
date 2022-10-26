@@ -35,6 +35,13 @@ functions:
       - httpApi:
           path: /chainrings
           method: get
+  stems:
+    timeout: 30
+    handler: handler.stems
+    events:
+      - httpApi:
+          path: /stems
+          method: get
 
 package:
   exclude:

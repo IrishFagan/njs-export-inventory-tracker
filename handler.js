@@ -36,6 +36,19 @@ const formattedComponent = async (componentName) => {
   return componentData;
 }
 
+const componentResponse = async (componentName) => {
+  return {
+    statusCode: 200,
+    body: JSON.stringify(
+      {
+        componentData: await formattedComponent(componentName)
+      },
+      null,
+      2
+    )
+  }
+}
+
 module.exports.frameCount = async (event) => {
   return {
     statusCode: 200,
@@ -50,27 +63,11 @@ module.exports.frameCount = async (event) => {
 };
 
 module.exports.frames = async (event) => {
-  return {
-    statusCode: 200,
-    body: JSON.stringify(
-    {
-      componentData: await formattedComponent('frames')
-    },
-    null,
-    2
-    ),
-  }
+  return componentResponse('frames')
 }
 
 module.exports.chainrings = async (event) => {
-  return {
-    statusCode: 200,
-    body: JSON.stringify(
-    {
-      componentData: await formattedComponent('chainrings')
-    },
-    null,
-    2
-    )
-  }
+  return componentResponse('chainrings')
 }
+
+module.exports.stems = async (event) => componentResponse('stems')
