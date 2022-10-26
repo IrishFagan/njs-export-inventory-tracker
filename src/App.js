@@ -5,7 +5,7 @@ import ComponentList from './components/ComponentList';
 import DateSelector from './components/DateSelector';
 
 export default function App() {
-  const [listingDate, setListingDate] = useState(new Date(/*2013-06-18'*/));
+  const [listingDate, setListingDate] = useState(new Date('2022-10-27'));
   const [frames, setFrames] = useState([]);
   const [chainrings, setChainrings] = useState([]);
   const [cranks, setCranks] = useState([]);
@@ -22,7 +22,7 @@ export default function App() {
     const getComponentInfo = async (componentName, component, setComponent) => {
       return axios
         .get(`https://v3ory7fu51.execute-api.us-west-2.amazonaws.com/${componentName}`)
-        .then(res => setComponent(res.data.componentData));
+        .then(res => setComponent(sortByDate(res.data.componentData)));
     }
 
     getComponentInfo('frames', frames, setFrames);
