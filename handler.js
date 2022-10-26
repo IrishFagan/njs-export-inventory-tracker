@@ -62,12 +62,8 @@ module.exports.frameCount = async (event) => {
   };
 };
 
-module.exports.frames = async (event) => {
-  return componentResponse('frames')
-}
+module.exports.frames = async (event) => return componentResponse('frames')
 
-module.exports.chainrings = async (event) => {
-  return componentResponse('chainrings')
-}
+module.exports.chainrings = async (event) => componentResponse('chainrings')
 
 module.exports.stems = async (event) => componentResponse('stems')
