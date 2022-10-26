@@ -1,4 +1,6 @@
 import {useState} from 'react';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 
 export default function DateSelector({setListingDate, listingDate, frames}) {
   const [openList, setOpenList] = useState(false);
@@ -15,11 +17,10 @@ export default function DateSelector({setListingDate, listingDate, frames}) {
     <div>
       <button onClick={handleOpenList}>{listingDate.toDateString()}</button>
       {openList ? (
-        <ui className="dropdown">
-          {frames.map((frame, index) => (
-            <li className="dropdown-item" onClick={() => {setListingDate(new Date(frame.created_at.replace(/-/g, '\/').replace(/T.+/, '')))}}>{(new Date(frame.created_at.replace(/-/g, '\/').replace(/T.+/, ''))).toDateString()}</li>
-          ))}
-        </ui>
+        <Calendar 
+          onChange={handleClick}
+          value={listingDate}
+        />
       ) : null}
     </div>
   )
