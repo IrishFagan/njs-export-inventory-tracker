@@ -81,12 +81,26 @@ module.exports.latestListing = async (event) => {
 
 module.exports.frames = async (event) => componentResponse('frames')
 
-module.exports.chainrings = async (event) => componentResponse('chainrings')
+module.exports.forks = async (event) => componentResponse('forks')
 
 module.exports.cranks = async (event) => componentResponse('cranks')
 
-module.exports.hubs = async (event) => componentResponse('hubs')
+module.exports.chainrings = async (event) => componentResponse('chainrings')
+
+module.exports.cogs = async (event) => componentResponse('cogs')
+
+module.exports.chains = async (event) => componentResponse('chains')
 
 module.exports.stems = async (event) => componentResponse('stems')
 
 module.exports.handlebars = async (event) => componentResponse('handlebars')
+
+module.exports.seatposts = async (event) => componentResponse('seatposts')
+
+module.exports.saddles = async (event) => componentResponse('saddles')
+
+module.exports.wheels = async (event) => componentResponse('wheelsets')
+
+module.exports.hubs = async (event) => componentResponse('hubs')
+
+module.exports.rims = async (event) => componentResponse('rims-1')

@@ -26,7 +26,6 @@ functions:
           path: /latest
           method: get
   frames:
-    timeout: 30
     handler: handler.frames
     events:
       - httpApi:
@@ -35,40 +34,77 @@ functions:
     environment: 
       BUCKET: njs-export
       REGION: us-west-2
-  chainrings:
-    timeout: 30
-    handler: handler.chainrings
+  forks:
+    handler: handler.forks
     events:
       - httpApi:
-          path: /chainrings
+          path: /forks
           method: get
   cranks:
-    timeout: 30
     handler: handler.cranks
     events:
       - httpApi:
           path: /cranks
           method: get
-  hubs:
-    timeout: 30
-    handler: handler.hubs
+  chainrings:
+    handler: handler.chainrings
     events:
       - httpApi:
-          path: /hubs
+          path: /chainrings
+          method: get
+  cogs:
+    handler: handler.cogs
+    events:
+      - httpApi:
+          path: /cogs
+          method: get
+  chains:
+    handler: handler.chains
+    events:
+      - httpApi:
+          path: /chains
           method: get
   stems:
-    timeout: 30
     handler: handler.stems
     events:
       - httpApi:
           path: /stems
           method: get
   handlebars:
-    timeout: 30
     handler: handler.handlebars
     events:
       - httpApi:
           path: /handlebars
+          method: get
+  seatposts:
+    handler: handler.seatposts
+    events:
+      - httpApi:
+          path: /seatposts
+          method: get
+  saddles:
+    handler: handler.saddles
+    events:
+      - httpApi:
+          path: /saddles
+          method: get
+  wheels:
+    handler: handler.wheels
+    events:
+      - httpApi:
+          path: /wheelsets
+          method: get
+  hubs:
+    handler: handler.hubs
+    events:
+      - httpApi:
+          path: /hubs
+          method: get
+  rims:
+    handler: handler.rims
+    events:
+      - httpApi:
+          path: /rims
           method: get
 
 package:
