@@ -62,6 +62,12 @@ module.exports.frameCount = async (event) => {
   };
 };
 
+module.exports.latestListing = async (event) => {
+  axios
+    .get('https://njs-export.com/products.json')
+    .then((res) => console.log(res.data.products[0].variants[0].created_at))
+}
+
 module.exports.frames = async (event) => componentResponse('frames')
 
 module.exports.chainrings = async (event) => componentResponse('chainrings')

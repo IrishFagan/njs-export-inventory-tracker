@@ -19,15 +19,22 @@ functions:
       - httpApi:
           path: /frames/count
           method: get
+  latestListing:
+    handler: handler.latestListing
+    events:
+      - httpApi:
+          path: /latest
+          method: get
   frames:
     timeout: 30
     handler: handler.frames
     events:
-      - s3:
-          bucket: njs-inventory
       - httpApi:
           path: /frames
           method: get
+    environment: 
+      BUCKET: njs-export
+      REGION: us-west-2
   chainrings:
     timeout: 30
     handler: handler.chainrings
