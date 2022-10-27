@@ -49,6 +49,8 @@ const componentResponse = async (componentName) => {
   }
 }
 
+/* - HANDLER FUNCTIONS - */
+
 module.exports.frameCount = async (event) => {
   return {
     statusCode: 200,
@@ -63,9 +65,18 @@ module.exports.frameCount = async (event) => {
 };
 
 module.exports.latestListing = async (event) => {
-  axios
-    .get('https://njs-export.com/products.json')
-    .then((res) => console.log(res.data.products[0].variants[0].created_at))
+  return {
+    statusCode: 200,
+    body: JSON.stringify(
+      {  
+        latestListingDate: await axios
+          .get('https://njs-export.com/products.json')
+          .then((res) => res.data.products[0].variants[0].created_at)
+      },
+      null,
+      2
+    ),
+  }
 }
 
 module.exports.frames = async (event) => componentResponse('frames')
