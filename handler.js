@@ -3,7 +3,7 @@ const axios = require('axios');
 const AWS = require('aws-sdk');
 
 const db = new AWS.DynamoDB.DocumentClient();
-const table = "NJSExportInventory"
+const table = "NJS-ExportInventory"
 
 const getComponentCount = async (componentName) => {
   return axios
@@ -28,12 +28,18 @@ const formattedComponent = async (componentName) => {
 
   await components.forEach((component) => {
     componentData.push({
-      title: component.title,
-      handle: component.handle,
-      created_at: component.created_at,
-      image: component.images[0].src,
-      available: component.variants[0].available,
-      price: component.variants[0].price
+      PutRequest: {
+        Item: {
+          "ID": component.id.toString(),
+          "Type": component.product_type,
+          "Title": component.title,
+          "Handle": component.handle,
+          "CreatedAt": component.created_at,
+          "Image": component.images[0].src,
+          "Available": component.variants[0].available,
+          "Price": component.variants[0].price
+        }
+      }
     })
   })
 
@@ -55,16 +61,29 @@ const componentResponse = async (componentName) => {
 
 /* - HANDLER FUNCTIONS - */
 
+module.exports.uploadComponents = async (event) => {
+  const params = {
+    RequestItems: {
+      'NJS-ExportInventory': await formattedComponent('bottom-brackets')
+    }
+  }
+
+  db.batchWrite(params, function(err, data) {
+    if (err) console.log(err);
+    else console.log(data);
+  })
+}
+
 module.exports.createComponent = async (event) => {
   const params = {
     TableName: table,
     Item: {
-      "id": "69420",
-      "HANDLE": "Stinky Bike Test",
-      "CREATED_AT": "00069-12-01T14:57:12+09:00",
-      "IMAGE": "www.test.com/image_of_poop.png",
-      "AVAILABLE": true,
-      "PRICE": "420.69"
+      "ID": "69420",
+      "Handle": "Stinky Bike Test",
+      "CreatedAt": "00069-12-01T14:57:12+09:00",
+      "Image": "www.test.com/image_of_poop.png",
+      "Available": true,
+      "Price": "420.69"
     }
   }
 
