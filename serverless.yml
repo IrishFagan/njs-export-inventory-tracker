@@ -122,12 +122,6 @@ functions:
           path: /rims
           method: get
     timeout: 25
-  createComponent:
-    handler: handler.createComponent
-    events:
-      - http:
-          path: upload
-          method: POST
   uploadComponents:
     handler: handler.uploadComponents
     events:

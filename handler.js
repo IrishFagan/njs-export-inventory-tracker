@@ -80,28 +80,6 @@ module.exports.uploadComponents = async (event) => {
   }
 }
 
-module.exports.createComponent = async (event) => {
-  const params = {
-    TableName: table,
-    Item: {
-      "ID": "69420",
-      "Handle": "Stinky Bike Test",
-      "CreatedAt": "00069-12-01T14:57:12+09:00",
-      "Image": "www.test.com/image_of_poop.png",
-      "Available": true,
-      "Price": "420.69"
-    }
-  }
-
-  db.put(params, function(err, data) {
-    if (err) {
-      console.log("Error", err);
-    } else {
-      console.log("Success", data);
-    }
-  });
-}
-
 module.exports.frameCount = async (event) => {
   return {
     statusCode: 200,
