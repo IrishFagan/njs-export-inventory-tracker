@@ -11,6 +11,7 @@ provider:
     cors: true
   layers:
     - arn:aws:lambda:us-west-2:740451665580:layer:axiosLayer:2
+  timeout: 25
 
 functions:
   frameCount:
@@ -19,18 +20,21 @@ functions:
       - httpApi:
           path: /frames/count
           method: get
+    timeout: 25
   latestListing:
     handler: handler.latestListing
     events:
       - httpApi:
           path: /latest
           method: get
+    timeout: 25
   frames:
     handler: handler.frames
     events:
       - httpApi:
           path: /frames
           method: get
+    timeout: 25
     environment: 
       BUCKET: njs-export
       REGION: us-west-2
@@ -40,72 +44,106 @@ functions:
       - httpApi:
           path: /forks
           method: get
+    timeout: 25
   cranks:
     handler: handler.cranks
     events:
       - httpApi:
           path: /cranks
           method: get
+    timeout: 25
   chainrings:
     handler: handler.chainrings
     events:
       - httpApi:
           path: /chainrings
           method: get
+    timeout: 25
   cogs:
     handler: handler.cogs
     events:
       - httpApi:
           path: /cogs
           method: get
+    timeout: 25
   chains:
     handler: handler.chains
     events:
       - httpApi:
           path: /chains
           method: get
+    timeout: 25
   stems:
     handler: handler.stems
     events:
       - httpApi:
           path: /stems
           method: get
+    timeout: 25
   handlebars:
     handler: handler.handlebars
     events:
       - httpApi:
           path: /handlebars
           method: get
+    timeout: 25
   seatposts:
     handler: handler.seatposts
     events:
       - httpApi:
           path: /seatposts
           method: get
+    timeout: 25
   saddles:
     handler: handler.saddles
     events:
       - httpApi:
           path: /saddles
           method: get
+    timeout: 25
   wheels:
     handler: handler.wheels
     events:
       - httpApi:
           path: /wheelsets
           method: get
+    timeout: 25
   hubs:
     handler: handler.hubs
     events:
       - httpApi:
           path: /hubs
           method: get
+    timeout: 25
   rims:
     handler: handler.rims
     events:
       - httpApi:
           path: /rims
           method: get
+    timeout: 25
+  createComponent:
+    handler: handler.createComponent
+    events:
+      - http:
+          path: upload
+          method: POST
+
+resources:
+  Resources:
+    NJSExportInventory:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: NJSExportInventory
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
 
 package:
   exclude:
