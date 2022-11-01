@@ -2,7 +2,7 @@
 const axios = require('axios');
 const AWS = require('aws-sdk');
 
-const db = new AWS.DynamoDB()
+const db = new AWS.DynamoDB.DocumentClient();
 const table = "NJSExportInventory"
 
 const getComponentCount = async (componentName) => {
@@ -59,29 +59,22 @@ module.exports.createComponent = async (event) => {
   const params = {
     TableName: table,
     Item: {
-      id: 69420,
-      handle: "Stinky Bike Test",
-      created_at: "00069-12-01T14:57:12+09:00",
-      image: "www.test.com/image_of_poop.png",
-      available: true,
-      price: "420.69"
+      "id": "69420",
+      "HANDLE": "Stinky Bike Test",
+      "CREATED_AT": "00069-12-01T14:57:12+09:00",
+      "IMAGE": "www.test.com/image_of_poop.png",
+      "AVAILABLE": true,
+      "PRICE": "420.69"
     }
   }
 
-  await db.putItem(params, (err, data) => {
+  db.put(params, function(err, data) {
     if (err) {
-      return {
-        statusCode: 200,
-        body: JSON.stringify(err)
-      }
+      console.log("Error", err);
     } else {
-      console.log("Success", data)
-      return {
-        statusCode: 200,
-        body: JSON.stringify(params)
-      }
+      console.log("Success", data);
     }
-  })
+  });
 }
 
 module.exports.frameCount = async (event) => {
