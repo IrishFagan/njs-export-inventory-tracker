@@ -62,16 +62,22 @@ const componentResponse = async (componentName) => {
 /* - HANDLER FUNCTIONS - */
 
 module.exports.uploadComponents = async (event) => {
-  const params = {
-    RequestItems: {
-      'NJS-ExportInventory': await formattedComponent('bottom-brackets')
+  const components = await formattedComponent('chainrings')
+
+  for (var i = 1; i <= (Math.ceil(Math.max(await components.length) / 20) * 20); i++) {
+    if (i % 20 === 0) {
+      var params = {
+        RequestItems: {
+          'NJS-ExportInventory': await components.slice(i-20, i)
+        }
+      }
+
+      await db.batchWrite(params, function(err, data) {
+        if (err) console.log(err);
+        else console.log(data);
+      })
     }
   }
-
-  db.batchWrite(params, function(err, data) {
-    if (err) console.log(err);
-    else console.log(data);
-  })
 }
 
 module.exports.createComponent = async (event) => {
