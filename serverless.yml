@@ -128,18 +128,24 @@ functions:
       - http:
           path: upload
           method: POST
+  uploadComponents:
+    handler: handler.uploadComponents
+    events:
+      - http:
+          path: upload
+          method: POST
 
 resources:
   Resources:
     NJSExportInventory:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: NJSExportInventory
+        TableName: NJS-ExportInventory
         AttributeDefinitions:
-          - AttributeName: id
+          - AttributeName: ID
             AttributeType: S
         KeySchema:
-          - AttributeName: id
+          - AttributeName: ID
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 1
