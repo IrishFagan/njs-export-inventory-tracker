@@ -34,7 +34,7 @@ const formattedComponent = async (componentName) => {
           "Type": component.product_type,
           "Title": component.title,
           "Handle": component.handle,
-          "CreatedAt": component.created_at,
+          "CreatedAt": component.created_at.replace(/-/g, '\/').replace(/T.+/, ''),
           "Image": component.images[0].src,
           "Available": component.variants[0].available,
           "Price": component.variants[0].price
