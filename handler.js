@@ -3,7 +3,7 @@ const axios = require('axios');
 const AWS = require('aws-sdk');
 
 const db = new AWS.DynamoDB.DocumentClient();
-const table = "NJS-ExportInventory"
+const table = "NJSExportInventory"
 
 const getComponentCount = async (componentName) => {
   return axios
@@ -30,11 +30,11 @@ const formattedComponent = async (componentName) => {
     componentData.push({
       PutRequest: {
         Item: {
-          "ID": component.id.toString(),
+          "ID": component.id,
           "Type": component.product_type,
           "Title": component.title,
           "Handle": component.handle,
-          "CreatedAt": component.created_at.replace(/-/g, '\/').replace(/T.+/, ''),
+          "CreatedDate": component.created_at.replace(/-/g, '\/').replace(/T.+/, ''),
           "Image": component.images[0].src,
           "Available": component.variants[0].available,
           "Price": component.variants[0].price
@@ -68,7 +68,7 @@ module.exports.uploadComponents = async (event) => {
     if (i % 20 === 0) {
       var params = {
         RequestItems: {
-          'NJS-ExportInventory': await components.slice(i-20, i)
+          'NJSExportInventory': await components.slice(i-20, i)
         }
       }
 
@@ -78,6 +78,22 @@ module.exports.uploadComponents = async (event) => {
       })
     }
   }
+}
+
+module.exports.getComponents = async (event) => {
+  var params = {
+    TableName: 'NJSExportInventory',
+    IndexName: 'createdDateIndex',
+    KeyConditionExpression: 'CreatedDate = :cd',
+    ExpressionAttributeValues: {
+      ':cd': '2018/07/17'
+    }
+  }
+
+  db.query(params, function(err, data) {
+    if (err) console.log(err);
+    else console.log(data);
+  })
 }
 
 module.exports.frameCount = async (event) => {
