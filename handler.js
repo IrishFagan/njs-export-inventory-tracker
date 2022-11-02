@@ -62,7 +62,7 @@ const componentResponse = async (componentName) => {
 /* - HANDLER FUNCTIONS - */
 
 module.exports.uploadComponents = async (event) => {
-  const components = await formattedComponent('chainrings')
+  const components = await formattedComponent('frames')
 
   for (var i = 1; i <= (Math.ceil(Math.max(await components.length) / 20) * 20); i++) {
     if (i % 20 === 0) {
@@ -86,14 +86,25 @@ module.exports.getComponents = async (event) => {
     IndexName: 'createdDateIndex',
     KeyConditionExpression: 'CreatedDate = :cd',
     ExpressionAttributeValues: {
-      ':cd': '2018/07/17'
+      ':cd': event['queryStringParameters']['date']
     }
   }
 
   db.query(params, function(err, data) {
     if (err) console.log(err);
-    else console.log(data);
+    else console.log('Data: ', data, 'Event :', event);
   })
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify(
+      {
+        okay: event['queryStringParameters']
+      },
+      null,
+      2
+    )
+  }
 }
 
 module.exports.frameCount = async (event) => {
