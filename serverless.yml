@@ -133,7 +133,11 @@ functions:
     events:
       - http:
           path: get
-          method: POST
+          method: GET
+          request:
+            parameters:
+              paths:
+                date: true
 
 resources:
   Resources:
