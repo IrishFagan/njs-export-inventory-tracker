@@ -128,15 +128,25 @@ functions:
       - http:
           path: upload
           method: POST
+  getComponents:
+    handler: handler.getComponents
+    events:
+      - http:
+          path: get
+          method: POST
 
 resources:
   Resources:
     NJSExportInventory:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: NJS-ExportInventory
+        TableName: NJSExportInventory
         AttributeDefinitions:
           - AttributeName: ID
+            AttributeType: N
+          - AttributeName: Type
+            AttributeType: S
+          - AttributeName: CreatedDate
             AttributeType: S
         KeySchema:
           - AttributeName: ID
@@ -144,6 +154,25 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+        GlobalSecondaryIndexes:
+          - IndexName: componentTypeIndex
+            KeySchema:
+              - AttributeName: Type
+                KeyType: HASH
+            Projection:
+              ProjectionType: 'ALL'
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
+          - IndexName: createdDateIndex
+            KeySchema:
+              - AttributeName: CreatedDate
+                KeyType: HASH
+            Projection:
+              ProjectionType: 'ALL'
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
 
 package:
   exclude:
