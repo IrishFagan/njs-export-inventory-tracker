@@ -132,11 +132,11 @@ functions:
     handler: handler.getComponents
     events:
       - http:
-          path: get
+          path: get/
           method: GET
           request:
             parameters:
-              paths:
+              querystrings:
                 date: true
 
 resources:
