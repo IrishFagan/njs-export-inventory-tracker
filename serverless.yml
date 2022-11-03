@@ -12,6 +12,12 @@ provider:
   layers:
     - arn:aws:lambda:us-west-2:740451665580:layer:axiosLayer:2
   timeout: 25
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action: 'dynamodb:Query'
+          Resource: '*'
 
 functions:
   frameCount:
