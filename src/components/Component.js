@@ -3,20 +3,20 @@ import './../App.css'
 export default function Component({component, index, listingDate}) {
 
 	const CreatedDate = (component) => {
-	  const date = new Date(component.created_at.replace(/-/g, '\/').replace(/T.+/, ''))
-	  return date.toDateString();
+	  const date = new Date(component.PutRequest.Item.CreatedDate.replace(/-/g, '\/').replace(/T.+/, '')).toDateString()
+	  return date;
 	}
 
-	if(CreatedDate(component) === listingDate.toDateString()) {
+	if(CreatedDate(component) === listingDate) {
 		return(
 			<li className="list" key={index}>
-				<a href={`https://www.njs-export.com/products/${component.handle}`}>
-	  		  <img src={component.image} alt="Frame" width={250} height={200} />
+				<a href={`https://www.njs-export.com/products/${component.PutRequest.Item.Handle}`}>
+	  		  <img src={component.PutRequest.Item.Image} alt="Frame" width={250} height={200} />
 	  		</a>
   		  <div>
-  		   	{component.title}
+  		   	{component.PutRequest.Item.Title}
   		  </div>
-  		  {component.available ? null : "SOLD OUT"}
+  		  {component.PutRequest.Item.Available ? null : "SOLD OUT"}
   		</li>
 		)
 	}
