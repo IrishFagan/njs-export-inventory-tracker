@@ -3,7 +3,7 @@ const axios = require('axios');
 const AWS = require('aws-sdk');
 
 const db = new AWS.DynamoDB.DocumentClient();
-const table = "NJSExportInventory"
+const table = "NJS-ExportInventory"
 
 const getComponentCount = async (componentName) => {
   return axios
@@ -34,7 +34,7 @@ const formattedComponent = async (componentName) => {
           "Type": component.product_type,
           "Title": component.title,
           "Handle": component.handle,
-          "CreatedDate": component.created_at.replace(/-/g, '\/').replace(/T.+/, ''),
+          "CreatedDate": new Date(component.created_at.replace(/-/g, '\/').replace(/T.+/, '')).toDateString(),
           "Image": component.images[0].src,
           "Available": component.variants[0].available,
           "Price": component.variants[0].price
@@ -62,13 +62,13 @@ const componentResponse = async (componentName) => {
 /* - HANDLER FUNCTIONS - */
 
 module.exports.uploadComponents = async (event) => {
-  const components = await formattedComponent('frames')
+  const components = await formattedComponent('chainrings')
 
   for (var i = 1; i <= (Math.ceil(Math.max(await components.length) / 20) * 20); i++) {
     if (i % 20 === 0) {
       var params = {
         RequestItems: {
-          'NJSExportInventory': await components.slice(i-20, i)
+          'NJS-ExportInventory': await components.slice(i-20, i)
         }
       }
 
@@ -82,7 +82,7 @@ module.exports.uploadComponents = async (event) => {
 
 module.exports.getComponents = async (event) => {
   var params = {
-    TableName: 'NJSExportInventory',
+    TableName: 'NJS-ExportInventory',
     IndexName: 'createdDateIndex',
     KeyConditionExpression: 'CreatedDate = :cd',
     ExpressionAttributeValues: {
@@ -94,6 +94,10 @@ module.exports.getComponents = async (event) => {
 
   return {
     statusCode: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true,
+    },
     body: JSON.stringify(
       {
         data: data
@@ -107,7 +111,7 @@ module.exports.frameCount = async (event) => {
     statusCode: 200,
     body: JSON.stringify(
       {
-        count: await getComponentCount('frames')
+        count: await getComponentCount('cranks')
       },
       null,
       2
