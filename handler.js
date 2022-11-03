@@ -90,19 +90,14 @@ module.exports.getComponents = async (event) => {
     }
   }
 
-  db.query(params, function(err, data) {
-    if (err) console.log(err);
-    else console.log('Data: ', data, 'Event :', event);
-  })
+  const data = await db.query(params).promise()
 
   return {
     statusCode: 200,
     body: JSON.stringify(
       {
-        okay: event['queryStringParameters']
-      },
-      null,
-      2
+        data: data
+      }
     )
   }
 }
