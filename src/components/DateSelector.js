@@ -3,7 +3,7 @@ import Calendar from 'react-calendar';
 import styles from './../App.css'
 import 'react-calendar/dist/Calendar.css';
 
-export default function DateSelector({setListingDate, listingDate, frames}) {
+export default function DateSelector({getComponentByDate, setListingDate, listingDate, frames}) {
   const [openList, setOpenList] = useState(false);
 
   const handleOpenList = () => {
@@ -12,6 +12,7 @@ export default function DateSelector({setListingDate, listingDate, frames}) {
 
   const handleClick = (date) => {
     setListingDate(date.toDateString())
+    getComponentByDate(date.toDateString());
   }
 
   return (
