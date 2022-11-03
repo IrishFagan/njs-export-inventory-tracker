@@ -11,18 +11,18 @@ export default function DateSelector({setListingDate, listingDate, frames}) {
   }
 
   const handleClick = (date) => {
-    setListingDate(new Date(date))
+    setListingDate(date.toDateString())
   }
 
   return (
     <div>
       <button 
-        onClick={handleOpenList}>{listingDate.toDateString()}
+        onClick={handleOpenList}>{listingDate}
       </button>
       {openList ? (
         <Calendar 
           onChange={handleClick}
-          value={listingDate}
+          value={new Date(listingDate)}
           className="Calendar"
         />
       ) : null}
