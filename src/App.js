@@ -13,13 +13,14 @@ export default function App() {
     return formattedDate.toDateString()
   }
 
-  useEffect(() => {
 
-    const getComponentByDate = async () => {
-      axios
-        .get(`https://vfvdj3rj36.execute-api.us-west-2.amazonaws.com/dev/get?date=${listingDate}`)
-        .then(res => console.log(res))
-    }
+  const getComponentByDate = async (date) => {
+    axios
+      .get(`https://vfvdj3rj36.execute-api.us-west-2.amazonaws.com/dev/get?date=${(date ? date : listingDate)}`)
+      .then(res => console.log(res))
+  }
+
+  useEffect(() => {
     
     const getComponentInfo = async (componentName, component, setComponent) => {
       return axios
@@ -44,6 +45,7 @@ export default function App() {
     <div>
       <h1>NJS Export Inventory Tracker</h1>
       <DateSelector
+        getComponentByDate={getComponentByDate}
         setListingDate={setListingDate}
         listingDate={listingDate}
         frames={frames}
