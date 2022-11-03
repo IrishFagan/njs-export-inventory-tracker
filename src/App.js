@@ -5,17 +5,21 @@ import ComponentList from './components/ComponentList';
 import DateSelector from './components/DateSelector';
 
 export default function App() {
-  const [listingDate, setListingDate] = useState(new Date('0000-01-01'));
+  const [listingDate, setListingDate] = useState(new Date().toDateString());
   const [frames, setFrames] = useState([]);
-  const [chainrings, setChainrings] = useState([]);
-  const [cranks, setCranks] = useState([]);
-  const [hubs, setHubs] = useState([]);
-  const [stems, setStems] = useState([]);
-  const [handlebars, setHandlebars] = useState([]);
 
-  const formatDate = (date) => new Date(date.replace(/-/g, '\/').replace(/T.+/, ''))
+  const formatDate = (date) => {
+    var formattedDate = (new Date(date.replace(/-/g, '\/').replace(/T.+/, '')))
+    return formattedDate.toDateString()
+  }
 
   useEffect(() => {
+
+    const getComponentByDate = async () => {
+      axios
+        .get(`https://vfvdj3rj36.execute-api.us-west-2.amazonaws.com/dev/get?date=${listingDate}`)
+        .then(res => console.log(res))
+    }
     
     const getComponentInfo = async (componentName, component, setComponent) => {
       return axios
@@ -31,13 +35,9 @@ export default function App() {
       )
     }
 
-    getComponentInfo('frames', frames, setFrames);
-    getComponentInfo('chainrings', chainrings, setChainrings);
-    getComponentInfo('cranks', cranks, setCranks);
-    getComponentInfo('hubs', hubs, setHubs);
-    getComponentInfo('stems', stems, setStems);
-    getComponentInfo('handlebars', handlebars, setHandlebars);
     getLatestListingDate();
+    getComponentByDate();
+    getComponentInfo('frames', frames, setFrames);
   }, [])
 
   return(
@@ -51,31 +51,6 @@ export default function App() {
       <ComponentList
         component={frames}
         componentName="Frames"
-        listingDate={listingDate}
-      />
-      <ComponentList
-        component={chainrings}
-        componentName="Chainrings"
-        listingDate={listingDate}
-      />
-      <ComponentList
-        component={cranks}
-        componentName="Cranks"
-        listingDate={listingDate}
-      />
-      <ComponentList
-        component={hubs}
-        componentName="Hubs"
-        listingDate={listingDate}
-      />
-      <ComponentList
-        component={stems}
-        componentName="Stems"
-        listingDate={listingDate}
-      />
-      <ComponentList
-        component={handlebars}
-        componentName="Handlebars"
         listingDate={listingDate}
       />
     </div>
