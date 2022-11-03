@@ -150,7 +150,7 @@ resources:
     NJSExportInventory:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: NJSExportInventory
+        TableName: NJS-ExportInventory
         AttributeDefinitions:
           - AttributeName: ID
             AttributeType: N
