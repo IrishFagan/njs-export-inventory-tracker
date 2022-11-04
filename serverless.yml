@@ -128,12 +128,12 @@ functions:
           path: /rims
           method: get
     timeout: 25
-  uploadComponents:
-    handler: handler.uploadComponents
+  uploadAllComponents:
+    handler: handler.uploadAllComponents
     events:
-      - http:
-          path: upload
-          method: POST
+      - httpApi:
+          path: /upload
+          method: GET
   getComponents:
     handler: handler.getComponents
     events:
@@ -163,7 +163,7 @@ resources:
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
+          WriteCapacityUnits: 2
         GlobalSecondaryIndexes:
           - IndexName: componentTypeIndex
             KeySchema:
@@ -173,7 +173,7 @@ resources:
               ProjectionType: 'ALL'
             ProvisionedThroughput:
               ReadCapacityUnits: 1
-              WriteCapacityUnits: 1
+              WriteCapacityUnits: 2
           - IndexName: createdDateIndex
             KeySchema:
               - AttributeName: CreatedDate
@@ -182,7 +182,7 @@ resources:
               ProjectionType: 'ALL'
             ProvisionedThroughput:
               ReadCapacityUnits: 1
-              WriteCapacityUnits: 1
+              WriteCapacityUnits: 2
 
 package:
   exclude:
