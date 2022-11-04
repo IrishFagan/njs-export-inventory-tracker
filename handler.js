@@ -59,10 +59,9 @@ const componentResponse = async (componentName) => {
   }
 }
 
-/* - HANDLER FUNCTIONS - */
-
-module.exports.uploadComponents = async (event) => {
-  const components = await formattedComponent('chainrings')
+const uploadComponents = async (componentName) => {
+  console.log('STARTING: ', componentName);
+  const components = await formattedComponent(componentName);
 
   for (var i = 1; i <= (Math.ceil(Math.max(await components.length) / 20) * 20); i++) {
     if (i % 20 === 0) {
@@ -78,6 +77,33 @@ module.exports.uploadComponents = async (event) => {
       })
     }
   }
+}
+
+/* - HANDLER FUNCTIONS - */
+
+module.exports.uploadAllComponents = async (event) => {
+  const componentNames = [
+    'frames',
+    'forks',
+    'chainrings',
+    'cogs',
+    'chains',
+    'cranks',
+    'bottom-brackets',
+    'handlebars',
+    'handlebar-stem-grip-sets',
+    'headsets',
+    'hubs',
+    'pedals',
+    'clips-and-straps',
+    'rims-1',
+    'saddles',
+    'seatposts',
+    'stems',
+    'wheelsets'
+  ]
+
+  componentNames.map(componentName => uploadComponents(componentName))
 }
 
 module.exports.getComponents = async (event) => {
