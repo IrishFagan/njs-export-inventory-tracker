@@ -5,10 +5,10 @@ export default function ComponentList({componentName, component, listingDate}) {
 		<div>
 			<h2>{componentName}</h2>
     	<ul>
-    	{component.map((individualComponent, i) =>
+    	{component.map((individualComponent) =>
     	  <Component
+    	  	key={individualComponent.ID}
     	    component={individualComponent}
-    	    index={i}
     	    listingDate={listingDate}
     	  />
     	)}
