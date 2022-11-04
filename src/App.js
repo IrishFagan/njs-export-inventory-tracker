@@ -6,6 +6,7 @@ import DateSelector from './components/DateSelector';
 
 export default function App() {
   const [listingDate, setListingDate] = useState(new Date().toDateString());
+  const [components, setComponents] = useState([]);
   const [frames, setFrames] = useState([]);
 
   const formatDate = (date) => {
@@ -13,20 +14,14 @@ export default function App() {
     return formattedDate.toDateString()
   }
 
-
   const getComponentByDate = async (date) => {
+    setComponents([]);
     axios
       .get(`https://vfvdj3rj36.execute-api.us-west-2.amazonaws.com/dev/get?date=${(date ? date : listingDate)}`)
-      .then(res => console.log(res))
+      .then(res => setComponents(res.data.data.Items))
   }
 
   useEffect(() => {
-    
-    const getComponentInfo = async (componentName, component, setComponent) => {
-      return axios
-        .get(`https://v3ory7fu51.execute-api.us-west-2.amazonaws.com/${componentName}`)
-        .then(res => setComponent(res.data.componentData));
-    }
 
     const getLatestListingDate = async () => {
       setListingDate(
@@ -38,7 +33,6 @@ export default function App() {
 
     getLatestListingDate();
     getComponentByDate();
-    getComponentInfo('frames', frames, setFrames);
   }, [])
 
   return(
@@ -51,8 +45,8 @@ export default function App() {
         frames={frames}
       />
       <ComponentList
-        component={frames}
-        componentName="Frames"
+        component={components}
+        componentName="Components"
         listingDate={listingDate}
       />
     </div>
