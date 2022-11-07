@@ -62,6 +62,7 @@ const componentResponse = async (componentName) => {
 const uploadComponents = async (componentName) => {
   console.log('STARTING: ', componentName);
   const components = await formattedComponent(componentName);
+  var results = [];
 
   for (var i = 1; i <= (Math.ceil(Math.max(await components.length) / 20) * 20); i++) {
     if (i % 20 === 0) {
@@ -71,12 +72,16 @@ const uploadComponents = async (componentName) => {
         }
       }
 
-      await db.batchWrite(params, function(err, data) {
+      db.batchWrite(params, function(err, data) {
         if (err) console.log(err);
-        else console.log(data);
+        else {
+          console.log(data);
+          results.push(data)
+        };
       })
     }
   }
+  await results;
 }
 
 /* - HANDLER FUNCTIONS - */
@@ -103,7 +108,9 @@ module.exports.uploadAllComponents = async (event) => {
     'wheelsets'
   ]
 
-  componentNames.map(componentName => uploadComponents(componentName))
+  for (var component of componentNames) {
+    await uploadComponents(component);
+  }
 }
 
 module.exports.getComponents = async (event) => {
