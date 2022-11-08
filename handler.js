@@ -192,7 +192,7 @@ module.exports.checkNewComponents = async (event) => {
       Body: currentProducts
     }
 
-    await s3.putObject(params);
+    await s3.putObject(params).promise();
   }
 }
 
