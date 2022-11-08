@@ -2,6 +2,7 @@
 const axios = require('axios');
 const AWS = require('aws-sdk');
 
+const s3 = new AWS.S3();
 const db = new AWS.DynamoDB.DocumentClient();
 const table = "NJS-ExportInventory"
 
@@ -169,9 +170,30 @@ module.exports.latestListing = async (event) => {
 
 module.exports.checkNewComponents = async (event) => {
   console.log(`Checking for new components at ${new Date()}`);
-  const products = await axios
-    .get('https://njs-export.com/products.json')
-    .then((res) => res.data)
+  const currentProducts = JSON.stringify(await axios
+      .get('https://njs-export.com/products.json')
+      .then((res) => res.data))
+
+  var params = {
+    Bucket: 'njs-export',
+    Key: 'products/products.json'
+  }
+
+  const savedProducts = (await s3.getObject(params).promise()).Body.toString('utf-8')
+
+  if (savedProducts === currentProducts) {
+    console.log('No new products have been listed!');
+  } else {
+    console.log('New products have been listed. Updating DB with new products.');
+
+    params = {
+      Bucket: 'njs-export',
+      Key: 'products/products.json',
+      Body: currentProducts
+    }
+
+    await s3.putObject(params);
+  }
 }
 
 module.exports.frames = async (event) => componentResponse('frames')
