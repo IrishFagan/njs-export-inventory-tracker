@@ -142,6 +142,13 @@ functions:
       - httpApi:
           path: /upload
           method: GET
+      - s3:
+          bucket: 'njs-export'
+          event: s3:ObjectCreated:*
+          rules:
+            - prefix: products/
+            - suffix: .json
+          existing: true
   getComponents:
     handler: handler.getComponents
     events:
