@@ -167,6 +167,13 @@ module.exports.latestListing = async (event) => {
   }
 }
 
+module.exports.checkNewComponents = async (event) => {
+  console.log(`Checking for new components at ${new Date()}`);
+  const products = await axios
+    .get('https://njs-export.com/products.json')
+    .then((res) => res.data)
+}
+
 module.exports.frames = async (event) => componentResponse('frames')
 
 module.exports.forks = async (event) => componentResponse('forks')
