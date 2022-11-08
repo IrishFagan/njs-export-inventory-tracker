@@ -21,6 +21,11 @@ provider:
         - Effect: Allow
           Action: 'dynamodb:BatchWriteItem'
           Resource: '*'
+        - Effect: Allow
+          Action: 
+            - 's3:putObject'
+            - 's3:getObject'
+          Resource: 'arn:aws:s3:::njs-export/*'
 
 functions:
   frameCount:
