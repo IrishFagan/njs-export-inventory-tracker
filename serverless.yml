@@ -147,6 +147,10 @@ functions:
             parameters:
               querystrings:
                 date: true
+  checkNewComponents:
+    handler: handler.checkNewComponents
+    events:
+      - schedule: rate(1 hour)
 
 resources:
   Resources:
