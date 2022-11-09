@@ -16,16 +16,15 @@ provider:
     role:
       statements:
         - Effect: Allow
-          Action: 'dynamodb:Query'
-          Resource: '*'
-        - Effect: Allow
-          Action: 'dynamodb:BatchWriteItem'
+          Action:
+          - 'dynamodb:Query'
+          - 'dynamodb:BatchWriteItem'
           Resource: '*'
         - Effect: Allow
           Action: 
             - 's3:putObject'
             - 's3:getObject'
-          Resource: 'arn:aws:s3:::njs-export/*'
+          Resource: '*'
 
 functions:
   frameCount:
