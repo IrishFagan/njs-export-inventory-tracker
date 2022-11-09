@@ -17,7 +17,7 @@ export default function App() {
   const getComponentByDate = async (date) => {
     setComponents([]);
     axios
-      .get(`https://vfvdj3rj36.execute-api.us-west-2.amazonaws.com/dev/get?date=${(date ? date : listingDate)}`)
+      .get(`https://kuwsmvuodh.execute-api.us-west-2.amazonaws.com/dev/get?date=${(date ? date : listingDate)}`)
       .then(res => setComponents(res.data.data.Items))
   }
 
@@ -25,7 +25,7 @@ export default function App() {
 
     const getLatestListingDate = async () => {
       const latestListingDate = await axios
-          .get('https://v3ory7fu51.execute-api.us-west-2.amazonaws.com/latest')
+          .get('https://hwf43ohf0h.execute-api.us-west-2.amazonaws.com/latest')
           .then((res) => formatDate(res.data.latestListingDate))
 
       setListingDate(latestListingDate)
