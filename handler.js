@@ -36,7 +36,7 @@ const formattedComponent = async (componentName) => {
           "Title": component.title,
           "Handle": component.handle,
           "CreatedDate": new Date(component.created_at.replace(/-/g, '\/').replace(/T.+/, '')).toDateString(),
-          "Image": component.images[0].src,
+          "Image": component.images[0] ? component.images[0].src : 'https://cdn.shopify.com/shopifycloud/shopify/assets/no-image-2048-5e88c1b20e087fb7bbe9a3771824e743c244f437e4f8ba93bbf7b11b53f7824c_1024x1024.gif',
           "Available": component.variants[0].available,
           "Price": component.variants[0].price
         }
