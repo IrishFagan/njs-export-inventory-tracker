@@ -57,6 +57,14 @@ functions:
             parameters:
               querystrings:
                 date: true
+  checkForSpecificComponent:
+    handler: handler.checkForSpecificComponent
+    events:
+      - stream:
+          arn: arn:aws:dynamodb:us-west-2:740451665580:table/NJS-ExportInventory/stream/2022-11-11T20:28:38.331
+          startingPosition: LATEST
+          maximumRetryAttempts: 5
+          enabled: true
   checkNewComponents:
     handler: handler.checkNewComponents
     events:
