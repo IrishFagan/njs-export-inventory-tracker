@@ -47,19 +47,6 @@ const formattedComponent = async (componentName) => {
   return componentData;
 }
 
-const componentResponse = async (componentName) => {
-  return {
-    statusCode: 200,
-    body: JSON.stringify(
-      {
-        componentData: await formattedComponent(componentName)
-      },
-      null,
-      2
-    )
-  }
-}
-
 const uploadComponents = async (componentName) => {
   console.log('STARTING: ', componentName);
   const components = await formattedComponent(componentName);
@@ -140,19 +127,6 @@ module.exports.getComponents = async (event) => {
   }
 }
 
-module.exports.frameCount = async (event) => {
-  return {
-    statusCode: 200,
-    body: JSON.stringify(
-      {
-        count: await getComponentCount('cranks')
-      },
-      null,
-      2
-    ),
-  };
-};
-
 module.exports.latestListing = async (event) => {
   return {
     statusCode: 200,
@@ -195,29 +169,3 @@ module.exports.checkNewComponents = async (event) => {
     await s3.putObject(params).promise();
   }
 }
-
-module.exports.frames = async (event) => componentResponse('frames')
-
-module.exports.forks = async (event) => componentResponse('forks')
-
-module.exports.cranks = async (event) => componentResponse('cranks')
-
-module.exports.chainrings = async (event) => componentResponse('chainrings')
-
-module.exports.cogs = async (event) => componentResponse('cogs')
-
-module.exports.chains = async (event) => componentResponse('chains')
-
-module.exports.stems = async (event) => componentResponse('stems')
-
-module.exports.handlebars = async (event) => componentResponse('handlebars')
-
-module.exports.seatposts = async (event) => componentResponse('seatposts')
-
-module.exports.saddles = async (event) => componentResponse('saddles')
-
-module.exports.wheels = async (event) => componentResponse('wheelsets')
-
-module.exports.hubs = async (event) => componentResponse('hubs')
-
-module.exports.rims = async (event) => componentResponse('rims-1')
