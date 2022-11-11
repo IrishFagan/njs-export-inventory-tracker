@@ -6,15 +6,15 @@ const s3 = new AWS.S3();
 const db = new AWS.DynamoDB.DocumentClient();
 const table = "NJS-ExportInventory"
 
-const getComponentCount = async (componentName) => {
+const getComponentTypeCount = async (componentName) => {
   return axios
     .get(`https://www.njs-export.com/collections/${componentName}.json`)
     .then(res => res.data.collection.products_count);
 }
 
-const getComponentInfo = async (componentName) => {
+const getAllComponentsOfType = async (componentName) => {
   var components = [];
-  const pages = await Math.ceil(await getComponentCount(componentName) / 30);
+  const pages = await Math.ceil(await getComponentTypeCount(componentName) / 30);
   for(let i = 1; i <= pages; i++) {
     await axios
       .get(`https://www.njs-export.com/collections/${componentName}/products.json?page=${i}`)
@@ -23,8 +23,8 @@ const getComponentInfo = async (componentName) => {
   return components;
 }
 
-const formattedComponent = async (componentName) => {
-  const components = await getComponentInfo(componentName);
+const getFormattedComponents = async (componentName) => {
+  const components = await getAllComponentsOfType(componentName);
   const componentData = []
 
   await components.forEach((component) => {
@@ -47,16 +47,16 @@ const formattedComponent = async (componentName) => {
   return componentData;
 }
 
-const uploadComponents = async (componentName) => {
+const uploadComponentType = async (componentName) => {
   console.log('STARTING: ', componentName);
-  const components = await formattedComponent(componentName);
-  var results = [];
+  const formattedComponents = await getFormattedComponents(componentName);
+  var promises = [];
 
-  for (var i = 1; i <= (Math.ceil(Math.max(await components.length) / 20) * 20); i++) {
+  for (var i = 1; i <= (Math.ceil(Math.max(await formattedComponents.length) / 20) * 20); i++) {
     if (i % 20 === 0) {
       var params = {
         RequestItems: {
-          'NJS-ExportInventory': await components.slice(i-20, i)
+          'NJS-ExportInventory': await formattedComponents.slice(i-20, i)
         }
       }
 
@@ -64,12 +64,12 @@ const uploadComponents = async (componentName) => {
         if (err) console.log(err);
         else {
           console.log(data);
-          results.push(data)
+          promises.push(data)
         };
       })
     }
   }
-  await results;
+  await promises;
 }
 
 /* - HANDLER FUNCTIONS - */
@@ -97,7 +97,7 @@ module.exports.uploadAllComponents = async (event) => {
   ]
 
   for (var component of componentNames) {
-    await uploadComponents(component);
+    await uploadComponentType(component);
   }
 }
 
