@@ -6,6 +6,8 @@ const s3 = new AWS.S3();
 const db = new AWS.DynamoDB.DocumentClient();
 const table = "NJS-ExportInventory"
 
+/* - HELPER FUNCTIONS - */
+
 const getComponentTypeCount = async (componentName) => {
   return axios
     .get(`https://www.njs-export.com/collections/${componentName}.json`)
@@ -72,6 +74,25 @@ const uploadComponentType = async (componentName) => {
   await promises;
 }
 
+const getComponentsByDate = async (date) => {
+  var params = {
+    TableName: 'NJS-ExportInventory',
+    IndexName: 'createdDateIndex',
+    KeyConditionExpression: 'CreatedDate = :cd',
+    ExpressionAttributeValues: {
+      ':cd': date
+    }
+  }
+
+  return await db.query(params).promise()
+}
+
+const getLatestListingDate = async () => {
+  return await axios
+    .get('https://njs-export.com/products.json')
+    .then((res) => res.data.products[0].variants[0].created_at)
+}
+
 /* - HANDLER FUNCTIONS - */
 
 module.exports.uploadAllComponents = async (event) => {
@@ -102,16 +123,7 @@ module.exports.uploadAllComponents = async (event) => {
 }
 
 module.exports.getComponentsByDate = async (event) => {
-  var params = {
-    TableName: 'NJS-ExportInventory',
-    IndexName: 'createdDateIndex',
-    KeyConditionExpression: 'CreatedDate = :cd',
-    ExpressionAttributeValues: {
-      ':cd': event['queryStringParameters']['date']
-    }
-  }
-
-  const data = await db.query(params).promise()
+  const data = await getComponentsByDate(event['queryStringParameters']['date'])
 
   return {
     statusCode: 200,
@@ -132,15 +144,15 @@ module.exports.getLatestListingDate = async (event) => {
     statusCode: 200,
     body: JSON.stringify(
       {  
-        latestListingDate: await axios
-          .get('https://njs-export.com/products.json')
-          .then((res) => res.data.products[0].variants[0].created_at)
+        latestListingDate: await getLatestListingDate()
       },
       null,
       2
     ),
   }
 }
+
+
 
 module.exports.checkNewComponents = async (event) => {
   console.log(`Checking for new components at ${new Date()}`);
