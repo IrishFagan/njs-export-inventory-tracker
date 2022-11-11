@@ -27,8 +27,8 @@ provider:
           Resource: '*'
 
 functions:
-  latestListing:
-    handler: handler.latestListing
+  getLatestListingDate:
+    handler: handler.getLatestListingDate
     events:
       - httpApi:
           path: /latest
@@ -47,8 +47,8 @@ functions:
             - prefix: products/
             - suffix: .json
           existing: true
-  getComponents:
-    handler: handler.getComponents
+  getComponentsByDate:
+    handler: handler.getComponentsByDate
     events:
       - http:
           path: get/

@@ -101,7 +101,7 @@ module.exports.uploadAllComponents = async (event) => {
   }
 }
 
-module.exports.getComponents = async (event) => {
+module.exports.getComponentsByDate = async (event) => {
   var params = {
     TableName: 'NJS-ExportInventory',
     IndexName: 'createdDateIndex',
@@ -127,7 +127,7 @@ module.exports.getComponents = async (event) => {
   }
 }
 
-module.exports.latestListing = async (event) => {
+module.exports.getLatestListingDate = async (event) => {
   return {
     statusCode: 200,
     body: JSON.stringify(
