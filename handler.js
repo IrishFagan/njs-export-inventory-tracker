@@ -152,7 +152,17 @@ module.exports.getLatestListingDate = async (event) => {
   }
 }
 
+module.exports.checkForSpecificComponent = async (event) => {
+  console.log('Invocation means change in table :)');
 
+  const records = event['Records']
+
+  for (var record of records) {
+    if(record.eventName === 'INSERT') {
+      console.log(records[0].dynamodb.NewImage.Title.S)
+    }
+  }
+}
 
 module.exports.checkNewComponents = async (event) => {
   console.log(`Checking for new components at ${new Date()}`);
@@ -167,7 +177,7 @@ module.exports.checkNewComponents = async (event) => {
 
   const savedProducts = (await s3.getObject(params).promise()).Body.toString('utf-8')
 
-  if (savedProducts === currentProducts) {
+  if (savedProducts !== currentProducts) {
     console.log('No new products have been listed!');
   } else {
     console.log('New products have been listed. Updating DB with new products.');
