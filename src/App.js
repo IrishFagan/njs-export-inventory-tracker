@@ -8,6 +8,7 @@ export default function App() {
   const [listingDate, setListingDate] = useState(new Date().toDateString());
   const [components, setComponents] = useState([]);
   const [email, setEmail] = useState("");
+  const [keywords, setKeywords] = useState("");
 
   const formatDate = (date) => {
     var formattedDate = (new Date(date.replace(/-/g, '\/').replace(/T.+/, '')))
@@ -26,7 +27,8 @@ export default function App() {
     axios
       .post(`https://kuwsmvuodh.execute-api.us-west-2.amazonaws.com/dev/update`,
         {
-          email: email
+          email: email,
+          keywords: keywords
         })
       .then(res => console.log(res));
   }
@@ -56,6 +58,15 @@ export default function App() {
             onChange={e => setEmail(e.target.value)}
           />
         </label>
+        <br />
+        <label>Enter keywords:
+          <input
+            type="text"
+            value={keywords}
+            onChange={e => setKeywords(e.target.value)}
+          />
+        </label>
+        <br />
         <input type="submit" />
       </form>
       <DateSelector
