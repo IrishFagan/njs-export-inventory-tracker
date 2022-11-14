@@ -30,7 +30,20 @@ export default function App() {
           email: email,
           keywords: keywords
         })
-      .then(res => console.log(res));
+      .then(res => {
+        setEmail("");
+        setKeywords("");
+        console.log(res);
+      })
+      .catch(err => console.log(err));
+  }
+
+  const handleKeywords = async (keyword) => {
+    if (keyword.match(/^[a-z0-9]+$/i) || keyword.match("")) {
+      setKeywords(keyword);
+    } else {
+      return;
+    }
   }
 
   useEffect(() => {
@@ -63,7 +76,7 @@ export default function App() {
           <input
             type="text"
             value={keywords}
-            onChange={e => setKeywords(e.target.value)}
+            onChange={e => handleKeywords(e.target.value)}
           />
         </label>
         <br />
