@@ -27,6 +27,14 @@ provider:
           Resource: '*'
 
 functions:
+  updateSubscriptionList:
+    handler: handler.updateSubscriptionList
+    events:
+      - http:
+          path: update/
+          method: POST
+          integration: lambda
+          cors: true
   getLatestListingDate:
     handler: handler.getLatestListingDate
     events:
