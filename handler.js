@@ -93,23 +93,32 @@ const getLatestListingDate = async () => {
     .then((res) => res.data.products[0].variants[0].created_at)
 }
 
+const returnResponse = (statusCode, body) => {
+  return {
+    statusCode: statusCode,
+    body: JSON.stringify(
+      {
+        body: body
+      }
+    )
+  }
+}
+
 /* - HANDLER FUNCTIONS - */
 
 module.exports.updateSubscriptionList = async (event) => {
+  var response = returnResponse(200, "All is well :)")
   const email = event.body.email
-  const keywords = event.body.keywords.split(',')
+  var keywords = event.body.keywords.split(',')
 
   console.log('email: ', email);
   console.log('keywords: ', keywords);
 
-  keywords.forEach((keyword) => 
-    {
-      if(keyword.match(/^[A-Za-z0-9]+$/i)) {
-        console.log('okay!')
-      } else {
-        console.log('not okay')
-      }
-    })
+  keywords = keywords.filter(keyword => keyword.match(/^[a-z0-9]+$/i))
+
+  console.log(keywords)
+
+  return response
 }
 
 module.exports.uploadAllComponents = async (event) => {
