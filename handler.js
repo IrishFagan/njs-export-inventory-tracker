@@ -114,7 +114,9 @@ module.exports.uploadAllComponents = async (event) => {
     'saddles',
     'seatposts',
     'stems',
-    'wheelsets'
+    'wheelsets',
+    'bric-a-brac',
+    'tools'
   ]
 
   for (var component of componentNames) {
@@ -157,9 +159,9 @@ module.exports.checkForSpecificComponent = async (event) => {
 
   const records = event['Records']
 
-  for (var record of records) {
-    if(record.eventName === 'INSERT') {
-      console.log(records[0].dynamodb.NewImage.Title.S)
+  for (var record = 0; record < records.length; record++) {
+    if(records[record].eventName === 'INSERT') {
+      console.log(records[record].dynamodb.NewImage.Title.S)
     }
   }
 }
@@ -177,7 +179,7 @@ module.exports.checkNewComponents = async (event) => {
 
   const savedProducts = (await s3.getObject(params).promise()).Body.toString('utf-8')
 
-  if (savedProducts !== currentProducts) {
+  if (savedProducts === currentProducts) {
     console.log('No new products have been listed!');
   } else {
     console.log('New products have been listed. Updating DB with new products.');
