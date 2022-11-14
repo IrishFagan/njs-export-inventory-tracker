@@ -96,20 +96,20 @@ const getLatestListingDate = async () => {
 /* - HANDLER FUNCTIONS - */
 
 module.exports.updateSubscriptionList = async (event) => {
-  console.log(event)
+  const email = event.body.email
+  const keywords = event.body.keywords.split(',')
 
-  return {
-    statusCode: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Credentials': true,
-    },
-    body: JSON.stringify(
-      {
-        data: 'hi'
+  console.log('email: ', email);
+  console.log('keywords: ', keywords);
+
+  keywords.forEach((keyword) => 
+    {
+      if(keyword.match(/^[A-Za-z0-9]+$/i)) {
+        console.log('okay!')
+      } else {
+        console.log('not okay')
       }
-    )
-  }
+    })
 }
 
 module.exports.uploadAllComponents = async (event) => {
