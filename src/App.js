@@ -7,7 +7,7 @@ import DateSelector from './components/DateSelector';
 export default function App() {
   const [listingDate, setListingDate] = useState(new Date().toDateString());
   const [components, setComponents] = useState([]);
-  const [frames, setFrames] = useState([]);
+  const [email, setEmail] = useState("");
 
   const formatDate = (date) => {
     var formattedDate = (new Date(date.replace(/-/g, '\/').replace(/T.+/, '')))
@@ -19,6 +19,16 @@ export default function App() {
     axios
       .get(`https://kuwsmvuodh.execute-api.us-west-2.amazonaws.com/dev/get?date=${(date ? date : listingDate)}`)
       .then(res => setComponents(res.data.data.Items))
+  }
+
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+    axios
+      .post(`https://kuwsmvuodh.execute-api.us-west-2.amazonaws.com/dev/update`,
+        {
+          email: email
+        })
+      .then(res => console.log(res));
   }
 
   useEffect(() => {
@@ -38,11 +48,20 @@ export default function App() {
   return(
     <div>
       <h1>NJS Export Inventory Tracker</h1>
+      <form onSubmit={handleSubmit}>
+        <label>Enter your email:
+          <input
+            type="text"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+          />
+        </label>
+        <input type="submit" />
+      </form>
       <DateSelector
         getComponentByDate={getComponentByDate}
         setListingDate={setListingDate}
         listingDate={listingDate}
-        frames={frames}
       />
       <ComponentList
         component={components}
