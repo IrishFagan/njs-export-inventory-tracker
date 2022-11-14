@@ -95,6 +95,23 @@ const getLatestListingDate = async () => {
 
 /* - HANDLER FUNCTIONS - */
 
+module.exports.updateSubscriptionList = async (event) => {
+  console.log(event)
+
+  return {
+    statusCode: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true,
+    },
+    body: JSON.stringify(
+      {
+        data: 'hi'
+      }
+    )
+  }
+}
+
 module.exports.uploadAllComponents = async (event) => {
   const componentNames = [
     'frames',
