@@ -10,6 +10,16 @@ const table = "NJS-ExportInventory";
 
 /* - HELPER FUNCTIONS - */
 
+const hashCode = (string) => {
+  let hash = 0;
+  for (let i = 0, len = string.length; i < len; i++) {
+    let chr = string.charCodeAt(i);
+    hash = (hash << 5) - hash + chr;
+    hash |= 0;
+  }
+  return hash;
+}
+
 const getComponentTypeCount = async (componentName) => {
   return axios
     .get(`https://www.njs-export.com/collections/${componentName}.json`)
@@ -107,17 +117,21 @@ const returnResponse = (statusCode, body) => {
 }
 
 const handleEmailVerification = async (email, keywords) => {
+  var hash = hashCode(email);
   var params = {
     Destination: {
       ToAddresses: [email]
     },
     Message: {
       Body: {
-        Text: { Data: `Please confirm you'd like to subscribe to these keywords:
-        ${keywords}
+        Text: { Data: 
+          `Please confirm you'd like to subscribe to these keywords:
+          ${keywords}
 
-        Please click the appropriate link below as well to confirm the addition of these keywords.
-        `},
+          Please click the appropriate link below as well to confirm the addition of these keywords.
+          ${hash}
+          `
+        },
       },
       Subject: { Data: `Confirm Keywords`},
     },
