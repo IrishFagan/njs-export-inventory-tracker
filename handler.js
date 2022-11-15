@@ -17,7 +17,7 @@ const hashCode = (string) => {
     hash = (hash << 5) - hash + chr;
     hash |= 0;
   }
-  return hash;
+  return hash + Date.now();
 }
 
 const getComponentTypeCount = async (componentName) => {
@@ -137,6 +137,8 @@ const handleEmailVerification = async (email, keywords) => {
     },
     Source: "dev-test-user@njs.bike",
   };
+
+  console.log(hash);
 
   return ses.sendEmail(params).promise()
 }
