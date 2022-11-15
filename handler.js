@@ -4,7 +4,9 @@ const AWS = require('aws-sdk');
 
 const s3 = new AWS.S3();
 const db = new AWS.DynamoDB.DocumentClient();
-const table = "NJS-ExportInventory"
+const ses = new AWS.SES();
+
+const table = "NJS-ExportInventory";
 
 /* - HELPER FUNCTIONS - */
 
@@ -104,6 +106,23 @@ const returnResponse = (statusCode, body) => {
   }
 }
 
+const handleEmailVerification = async (email, keywords) => {
+  var params = {
+    Destination: {
+      ToAddresses: [email]
+    },
+    Message: {
+      Body: {
+        Text: { Data: `Please confirm you'd like to subscribe to these keywords: ${keywords}`},
+      },
+      Subject: { Data: `Confirm Keywords`},
+    },
+    Source: "confirmation@njs.bike",
+  };
+
+  return ses.sendEmail(params).promise()
+}
+
 /* - HANDLER FUNCTIONS - */
 
 module.exports.updateSubscriptionList = async (event) => {
@@ -117,6 +136,10 @@ module.exports.updateSubscriptionList = async (event) => {
   keywords = keywords.filter(keyword => keyword.match(/^[a-z0-9]+$/i))
 
   console.log(keywords)
+
+  emailResponse = await handleEmailVerification(email, keywords);
+
+  console.log(emailResponse);
 
   return response
 }
