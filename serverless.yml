@@ -29,11 +29,11 @@ provider:
           Action:
             - 'ses:SendEmail'
             - 'ses:SendRawEmail'
-          Resource: 'arn:aws:ses:us-west-2:740451665580:identity/njs.bike'
+          Resource: '*'
 
 functions:
-  updateSubscriptionList:
-    handler: handler.updateSubscriptionList
+  sendEmailConfirmation:
+    handler: handler.sendEmailConfirmation
     events:
       - http:
           path: update/
@@ -87,6 +87,19 @@ functions:
 
 resources:
   Resources:
+    userHashTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: userHashTable
+        AttributeDefinitions:
+          - AttributeName: UserHash
+            AttributeType: N
+        KeySchema:
+          - AttributeName: UserHash
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
     NJSExportInventory:
       Type: AWS::DynamoDB::Table
       Properties:

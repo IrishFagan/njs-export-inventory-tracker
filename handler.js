@@ -113,11 +113,15 @@ const handleEmailVerification = async (email, keywords) => {
     },
     Message: {
       Body: {
-        Text: { Data: `Please confirm you'd like to subscribe to these keywords: ${keywords}`},
+        Text: { Data: `Please confirm you'd like to subscribe to these keywords:
+        ${keywords}
+
+        Please click the appropriate link below as well to confirm the addition of these keywords.
+        `},
       },
       Subject: { Data: `Confirm Keywords`},
     },
-    Source: "confirmation@njs.bike",
+    Source: "dev-test-user@njs.bike",
   };
 
   return ses.sendEmail(params).promise()
@@ -125,7 +129,7 @@ const handleEmailVerification = async (email, keywords) => {
 
 /* - HANDLER FUNCTIONS - */
 
-module.exports.updateSubscriptionList = async (event) => {
+module.exports.sendEmailConfirmation = async (event) => {
   var response = returnResponse(200, "All is well :)")
   const email = event.body.email
   var keywords = event.body.keywords.split(',')
@@ -137,7 +141,7 @@ module.exports.updateSubscriptionList = async (event) => {
 
   console.log(keywords)
 
-  emailResponse = await handleEmailVerification(email, keywords);
+  var emailResponse = await handleEmailVerification(email, keywords);
 
   console.log(emailResponse);
 
