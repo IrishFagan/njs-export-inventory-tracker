@@ -17,14 +17,19 @@ provider:
       statements:
         - Effect: Allow
           Action:
-          - 'dynamodb:Query'
-          - 'dynamodb:BatchWriteItem'
+            - 'dynamodb:Query'
+            - 'dynamodb:BatchWriteItem'
           Resource: '*'
         - Effect: Allow
           Action: 
             - 's3:putObject'
             - 's3:getObject'
           Resource: '*'
+        - Effect: Allow
+          Action:
+            - 'ses:SendEmail'
+            - 'ses:SendRawEmail'
+          Resource: 'arn:aws:ses:us-west-2:740451665580:identity/njs.bike'
 
 functions:
   updateSubscriptionList:
@@ -35,6 +40,7 @@ functions:
           method: POST
           integration: lambda
           cors: true
+
   getLatestListingDate:
     handler: handler.getLatestListingDate
     events:
