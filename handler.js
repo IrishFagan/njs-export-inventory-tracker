@@ -118,7 +118,7 @@ const returnResponse = (statusCode, body) => {
 
 const handleEmailVerification = async (email, keywords) => {
   var hash = hashCode(email);
-  var params = {
+  var emailParams = {
     Destination: {
       ToAddresses: [email]
     },
@@ -137,10 +137,19 @@ const handleEmailVerification = async (email, keywords) => {
     },
     Source: "dev-test-user@njs.bike",
   };
+  var dbParams = {
+    TableName: 'UserHashTable',
+    Item: {
+      "UserHash": hash,
+      "ttl": Math.round(Date.now() / 1000) + 90
+    }
+  }
 
   console.log(hash);
 
-  return ses.sendEmail(params).promise()
+  await db.put(dbParams).promise()
+
+  return ses.sendEmail(emailParams).promise()
 }
 
 /* - HANDLER FUNCTIONS - */
@@ -150,16 +159,12 @@ module.exports.sendEmailConfirmation = async (event) => {
   const email = event.body.email
   var keywords = event.body.keywords.split(',')
 
+  keywords = keywords.filter(keyword => keyword.match(/^[a-z0-9]+$/i))
+
   console.log('email: ', email);
   console.log('keywords: ', keywords);
 
-  keywords = keywords.filter(keyword => keyword.match(/^[a-z0-9]+$/i))
-
-  console.log(keywords)
-
   var emailResponse = await handleEmailVerification(email, keywords);
-
-  console.log(emailResponse);
 
   return response
 }
