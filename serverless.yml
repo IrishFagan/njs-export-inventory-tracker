@@ -19,6 +19,7 @@ provider:
           Action:
             - 'dynamodb:Query'
             - 'dynamodb:BatchWriteItem'
+            - 'dynamodb:PutItem'
           Resource: '*'
         - Effect: Allow
           Action: 
@@ -62,6 +63,16 @@ functions:
             - suffix: .json
           existing: true
     maximumRetryAttempts: 2
+  updateKeywords:
+    handler: handler.updateKeywords
+    events:
+      - httpApi:
+          path: /update
+          method: GET
+          request:
+            parameters:
+              querystrings:
+                date: true
   getComponentsByDate:
     handler: handler.getComponentsByDate
     events:
@@ -87,16 +98,20 @@ functions:
 
 resources:
   Resources:
-    userHashTable:
+    UserHashTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: userHashTable
+        TableName: UserHashTable
         AttributeDefinitions:
           - AttributeName: UserHash
+            AttributeType: N
+          - AttributeName: ttl
             AttributeType: N
         KeySchema:
           - AttributeName: UserHash
             KeyType: HASH
+          - AttributeName: ttl
+            KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
