@@ -129,7 +129,9 @@ const handleEmailVerification = async (email, keywords) => {
           ${keywords}
 
           Please click the appropriate link below as well to confirm the addition of these keywords.
-          ${hash}
+          
+
+          https://kuwsmvuodh.execute-api.us-west-2.amazonaws.com/dev/update/keywords?hash=${hash}&keywords=${keywords}&email=${email.replace("@","%40")}
           `
         },
       },
@@ -155,7 +157,9 @@ const handleEmailVerification = async (email, keywords) => {
 /* - HANDLER FUNCTIONS - */
 
 module.exports.updateKeywords = async (event) => {
-  console.log('received event: ', event);
+  console.log('great');
+
+  return { statusCode: 200 }
 }
 
 module.exports.sendEmailConfirmation = async (event) => {
