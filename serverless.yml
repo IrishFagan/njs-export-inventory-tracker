@@ -66,13 +66,15 @@ functions:
   updateKeywords:
     handler: handler.updateKeywords
     events:
-      - httpApi:
-          path: /update
+      - http:
+          path: update/keywords/
           method: GET
           request:
             parameters:
               querystrings:
-                date: true
+                hash: true
+                keywords: true
+                email: true
   getComponentsByDate:
     handler: handler.getComponentsByDate
     events:
