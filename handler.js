@@ -154,6 +154,10 @@ const handleEmailVerification = async (email, keywords) => {
 
 /* - HANDLER FUNCTIONS - */
 
+module.exports.updateKeywords = async (event) => {
+  console.log('received event: ', event);
+}
+
 module.exports.sendEmailConfirmation = async (event) => {
   var response = returnResponse(200, "All is well :)")
   const email = event.body.email
