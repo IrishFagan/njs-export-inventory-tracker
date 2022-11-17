@@ -39,7 +39,7 @@ export default function App() {
   }
 
   const handleKeywords = async (keyword) => {
-    if (keyword.match(/^[a-z0-9]+$/i) || keyword === "") {
+    if (keyword.match(/^[a-z0-9,]+$/i) || keyword === "") {
       setKeywords(keyword);
     }
   }
