@@ -157,9 +157,10 @@ const handleEmailVerification = async (email, keywords) => {
 /* - HANDLER FUNCTIONS - */
 
 module.exports.updateKeywords = async (event) => {
+  console.log(event['queryStringParameters'])
   console.log('great');
 
-  return { statusCode: 200 }
+  return { statusCode: 200, body: JSON.stringify({ data: event['queryStringParameters'] }) }
 }
 
 module.exports.sendEmailConfirmation = async (event) => {
