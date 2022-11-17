@@ -154,6 +154,13 @@ const handleEmailVerification = async (email, keywords) => {
   return ses.sendEmail(emailParams).promise()
 }
 
+const deleteFromDB = async (tableName, key) => {
+  await db.delete({
+    TableName: tableName,
+    Key: key
+  }).promise()
+}
+
 /* - HANDLER FUNCTIONS - */
 
 module.exports.updateKeywords = async (event) => {
@@ -180,12 +187,13 @@ module.exports.updateKeywords = async (event) => {
 
   if (result.Count) {
     response = "Your keywords have been added to your subscription list. You'll recieve an email when these items are added to the website."
+    deleteFromDB('UserHashTable', result.Items[0]);
   } else {
     response = "Your confirmation link is dead. Please fill out the keyword form again and click the link within a minute of receiving your email. :)"
     statusCode = 404;
   }
 
-  return { statusCode: statusCode, body: JSON.stringify({ response: response }) }
+  return returnResponse(statusCode, response)
 }
 
 module.exports.sendEmailConfirmation = async (event) => {
