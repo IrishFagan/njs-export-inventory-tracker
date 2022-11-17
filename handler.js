@@ -159,6 +159,8 @@ const handleEmailVerification = async (email, keywords) => {
 module.exports.updateKeywords = async (event) => {
   console.log(event['queryStringParameters'])
   console.log('great');
+  var response = "";
+  var statusCode = 200;
 
   const params = {
     TableName: 'UserHashTable',
@@ -176,7 +178,14 @@ module.exports.updateKeywords = async (event) => {
 
   const result = await db.query(params).promise()
 
-  return { statusCode: 200, body: JSON.stringify({ data: result }) }
+  if (result.Count) {
+    response = "Your keywords have been added to your subscription list. You'll recieve an email when these items are added to the website."
+  } else {
+    response = "Your confirmation link is dead. Please fill out the keyword form again and click the link within a minute of receiving your email. :)"
+    statusCode = 404;
+  }
+
+  return { statusCode: statusCode, body: JSON.stringify({ response: response }) }
 }
 
 module.exports.sendEmailConfirmation = async (event) => {
