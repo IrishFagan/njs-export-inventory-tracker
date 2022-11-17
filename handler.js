@@ -160,7 +160,23 @@ module.exports.updateKeywords = async (event) => {
   console.log(event['queryStringParameters'])
   console.log('great');
 
-  return { statusCode: 200, body: JSON.stringify({ data: event['queryStringParameters'] }) }
+  const params = {
+    TableName: 'UserHashTable',
+    IndexName: 'userHashIndex',
+    KeyConditionExpression: 'UserHash = :uh',
+    FilterExpression: '#timetolive >= :currentEpoch',
+    ExpressionAttributeValues: {
+      ':uh': parseInt(event['queryStringParameters']['hash']),
+      ':currentEpoch': Date.now() / 1000
+    },
+    ExpressionAttributeNames: {
+      '#timetolive': 'ttl'
+    }
+  }
+
+  const result = await db.query(params).promise()
+
+  return { statusCode: 200, body: JSON.stringify({ data: result }) }
 }
 
 module.exports.sendEmailConfirmation = async (event) => {
