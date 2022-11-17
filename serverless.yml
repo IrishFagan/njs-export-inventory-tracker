@@ -20,6 +20,7 @@ provider:
             - 'dynamodb:Query'
             - 'dynamodb:BatchWriteItem'
             - 'dynamodb:PutItem'
+            - 'dynamodb:DeleteItem'
           Resource: '*'
         - Effect: Allow
           Action: 
