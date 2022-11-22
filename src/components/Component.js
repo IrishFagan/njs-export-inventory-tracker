@@ -7,6 +7,8 @@ export default function Component({component, ID, listingDate}) {
 			<a 
 				className="flex justify-center grid" 
 				href={`https://www.njs-export.com/products/${component.Handle}`}
+				target="_blank"
+				rel="noopener noreferrer"
 			>
 	 		  <img 
 	 		  	className="mx-auto rounded-md shadow-lg m-3"
