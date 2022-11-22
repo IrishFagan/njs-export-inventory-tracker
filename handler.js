@@ -1,6 +1,14 @@
 "use strict";
 const axios = require('axios');
 const AWS = require('aws-sdk');
+const mysql = require('mysql');
+
+const connection = mysql.createConnection({
+  host    : process.env.AURORA_HOST,
+  user    : process.env.AURORA_USER,
+  password: process.env.AURORA_PW,
+  database: process.env.AURORA_DB
+})
 
 const s3 = new AWS.S3();
 const db = new AWS.DynamoDB.DocumentClient();
@@ -162,6 +170,17 @@ const deleteFromDB = async (tableName, key) => {
 }
 
 /* - HANDLER FUNCTIONS - */
+
+module.exports.getKeywords = async (event) => {
+  connection.connect((err) => {
+    if (err) throw(err);
+    connection.query("SELECT * FROM subscriptions", (err, res) => {
+      if (err) throw(err);
+      console.log(res);
+      connection.end();
+    });
+  })
+}
 
 module.exports.updateKeywords = async (event) => {
   console.log(event['queryStringParameters'])
