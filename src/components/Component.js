@@ -3,7 +3,7 @@ import './../App.css'
 export default function Component({component, ID, listingDate}) {
 
 	return(
-		<li>
+		<li className="border-2 shadow-sm rounded-sm">
 			<a 
 				className="flex justify-center grid" 
 				href={`https://www.njs-export.com/products/${component.Handle}`}
