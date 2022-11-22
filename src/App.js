@@ -60,7 +60,7 @@ export default function App() {
 
   return(
     <div className="font-mono font-medium">
-      <h1>NJS Export Inventory Tracker</h1>
+      <h1 className="text-5xl italic m-4">NJS Export Inventory Tracker</h1>
       <form onSubmit={handleSubmit}>
         <label>Enter your email:
           <input
