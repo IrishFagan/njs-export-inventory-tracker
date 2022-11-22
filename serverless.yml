@@ -2,6 +2,7 @@ org: irishfagan
 app: njs-export-inventory-tracker
 service: njs-export-inventory-tracker
 frameworkVersion: '3'
+useDotenv: true
 
 provider:
   name: aws
@@ -34,6 +35,8 @@ provider:
           Resource: '*'
 
 functions:
+  getKeywords:
+    handler: handler.getKeywords
   sendEmailConfirmation:
     handler: handler.sendEmailConfirmation
     events:
