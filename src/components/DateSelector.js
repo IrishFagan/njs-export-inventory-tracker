@@ -17,7 +17,8 @@ export default function DateSelector({getComponentByDate, setListingDate, listin
 
   return (
     <div>
-      <button 
+      <button
+        className="p-1 border-2 rounded-md"
         onClick={handleOpenList}>{listingDate}
       </button>
       {openList ? (
