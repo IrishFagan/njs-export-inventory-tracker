@@ -171,10 +171,11 @@ const deleteFromDB = async (tableName, key) => {
 
 /* - HANDLER FUNCTIONS - */
 
-module.exports.getKeywords = async (event) => {
+module.exports.getKeywordsFromDB = async (event) => {
+  const sql = `SELECT keyword FROM keywords`;
   connection.connect((err) => {
     if (err) throw(err);
-    connection.query("SELECT * FROM subscriptions", (err, res) => {
+    connection.query(sql, (err, res) => {
       if (err) throw(err);
       console.log(res);
       connection.end();
