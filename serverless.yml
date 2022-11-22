@@ -37,8 +37,8 @@ provider:
           Resource: '*'
 
 functions:
-  getKeywords:
-    handler: handler.getKeywords
+  getKeywordsFromDB:
+    handler: handler.getKeywordsFromDB
   sendEmailConfirmation:
     handler: handler.sendEmailConfirmation
     events:
