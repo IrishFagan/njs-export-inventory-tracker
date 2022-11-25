@@ -170,26 +170,25 @@ const deleteFromDB = async (tableName, key) => {
 }
 
 const queryDB = async (query, values = []) => {
-  connection.query(query, (err) => {
-    if (err.code !== 'ER_DUP_ENTRY') {
-      connection.end()
-      throw(err);
+  connection.query(query, (err, res) => {
+    if (err) {
+      if (err.code !== 'ER_DUP_ENTRY') {
+        connection.end()
+        throw(err);
+      }
+      if (err.code === 'ER_DUP_ENTRY') console.log('Just a dupe entry! Handled by DB engine :)')
     }
-    if (err.code === 'ER_DUP_ENTRY') console.log('Just a dupe entry! Handled by DB engine :)')
+    console.log(res);
   })
 }
 
 /* - HANDLER FUNCTIONS - */
 
 module.exports.getKeywordsFromDB = async (event) => {
-  const sql = `SELECT keyword FROM keywords`;
   connection.connect((err) => {
     if (err) throw(err);
-    connection.query(sql, (err, res) => {
-      if (err) throw(err);
-      console.log(res);
-      connection.end();
-    });
+    queryDB(`SELECT keyword FROM keywords`);
+    connection.end()
   })
 }
 
