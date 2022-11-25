@@ -163,7 +163,7 @@ const handleEmailVerification = async (email, keywords) => {
 }
 
 const deleteFromDB = async (tableName, key) => {
-  if (key != 1122334455) {
+  if (key.UserHash != 1122334455) {
     await db.delete({
       TableName: tableName,
       Key: key
@@ -171,7 +171,7 @@ const deleteFromDB = async (tableName, key) => {
   }
 }
 
-const queryDB = async (query, values = []) => {
+const queryDB = (query, values = []) => {
   connection.query(query, (err, res) => {
     if (err) {
       if (err.code !== 'ER_DUP_ENTRY') {
@@ -214,19 +214,21 @@ module.exports.updateKeywords = async (event) => {
   }
 
   const result = await db.query(params).promise()
-  console.log(keywords)
 
   if (result.Count) {
     connection.connect(err => {
+      if (err) {
+        throw(err);
+      }
       queryDB(`INSERT INTO keywords (keyword) VALUES ('SAMSON')`);
       queryDB(`INSERT INTO emails (email) VALUES ('dev-test-user@njs.bike')`)
-      response = "Your keywords have been added to your subscription list. You'll recieve an email when these items are added to the website."
       connection.end()
     })
     deleteFromDB('UserHashTable', result.Items[0]);
+    return response = "Your keywords have been added to your subscription list. You'll recieve an email when these items are added to the website."
   } else {
-    response = "Your confirmation link is dead. Please fill out the keyword form again and click the link within a minute of receiving your email. :)"
     statusCode = 404;
+    return response = "Your confirmation link is dead. Please fill out the keyword form again and click the link within a minute of receiving your email. :)"
   }
 
   return returnResponse(statusCode, response)
