@@ -169,6 +169,16 @@ const deleteFromDB = async (tableName, key) => {
   }).promise()
 }
 
+const queryDB = async (query, values = []) => {
+  connection.query(query, (err) => {
+    if (err.code !== 'ER_DUP_ENTRY') {
+      connection.end()
+      throw(err);
+    }
+    if (err.code === 'ER_DUP_ENTRY') console.log('Just a dupe entry! Handled by DB engine :)')
+  })
+}
+
 /* - HANDLER FUNCTIONS - */
 
 module.exports.getKeywordsFromDB = async (event) => {
@@ -206,15 +216,12 @@ module.exports.updateKeywords = async (event) => {
   console.log(keywords)
 
   if (result.Count) {
-    connection.query(`INSERT INTO keywords (keyword) VALUES ('SAMSON')`, (err) => {
-      if (err.code !== 'ER_DUP_ENTRY') {
-        connection.end()
-        throw(err);
-      }
-      if (err.code === 'ER_DUP_ENTRY') console.log('Just a dupe entry! Handled by DB engine :)')
-      connection.end();
+    connection.connect(err => {
+      queryDB(`INSERT INTO keywords (keyword) VALUES ('SAMSON')`);
+      queryDB(`INSERT INTO emails (email) VALUES ('dev-test-user@njs.bike')`)
+      response = "Your keywords have been added to your subscription list. You'll recieve an email when these items are added to the website."
+      connection.end()
     })
-    response = "Your keywords have been added to your subscription list. You'll recieve an email when these items are added to the website."
     //deleteFromDB('UserHashTable', result.Items[0]);
   } else {
     response = "Your confirmation link is dead. Please fill out the keyword form again and click the link within a minute of receiving your email. :)"
