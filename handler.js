@@ -184,8 +184,7 @@ module.exports.getKeywordsFromDB = async (event) => {
 }
 
 module.exports.updateKeywords = async (event) => {
-  console.log(event['queryStringParameters'])
-  console.log('great');
+  var keywords = event['queryStringParameters']['keywords'];
   var response = "";
   var statusCode = 200;
 
@@ -204,10 +203,19 @@ module.exports.updateKeywords = async (event) => {
   }
 
   const result = await db.query(params).promise()
+  console.log(keywords)
 
   if (result.Count) {
+    connection.query(`INSERT INTO keywords (keyword) VALUES ('SAMSON')`, (err) => {
+      if (err.code !== 'ER_DUP_ENTRY') {
+        connection.end()
+        throw(err);
+      }
+      if (err.code === 'ER_DUP_ENTRY') console.log('Just a dupe entry! Handled by DB engine :)')
+      connection.end();
+    })
     response = "Your keywords have been added to your subscription list. You'll recieve an email when these items are added to the website."
-    deleteFromDB('UserHashTable', result.Items[0]);
+    //deleteFromDB('UserHashTable', result.Items[0]);
   } else {
     response = "Your confirmation link is dead. Please fill out the keyword form again and click the link within a minute of receiving your email. :)"
     statusCode = 404;
