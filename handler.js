@@ -163,10 +163,12 @@ const handleEmailVerification = async (email, keywords) => {
 }
 
 const deleteFromDB = async (tableName, key) => {
-  await db.delete({
-    TableName: tableName,
-    Key: key
-  }).promise()
+  if (key != 1122334455) {
+    await db.delete({
+      TableName: tableName,
+      Key: key
+    }).promise()
+  }
 }
 
 const queryDB = async (query, values = []) => {
@@ -221,7 +223,7 @@ module.exports.updateKeywords = async (event) => {
       response = "Your keywords have been added to your subscription list. You'll recieve an email when these items are added to the website."
       connection.end()
     })
-    //deleteFromDB('UserHashTable', result.Items[0]);
+    deleteFromDB('UserHashTable', result.Items[0]);
   } else {
     response = "Your confirmation link is dead. Please fill out the keyword form again and click the link within a minute of receiving your email. :)"
     statusCode = 404;
