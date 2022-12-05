@@ -196,7 +196,7 @@ module.exports.getKeywordsFromDB = async (event) => {
 
 module.exports.updateKeywords = async (event) => {
   var keywords = event['queryStringParameters']['keywords'];
-  var response = "";
+  var response = "Your keywords have been added to your subscription list. You'll recieve an email when associated items are added to the website.";
   var statusCode = 200;
 
   const params = {
@@ -213,22 +213,21 @@ module.exports.updateKeywords = async (event) => {
     }
   }
 
-  const result = await db.query(params).promise()
+  const result = await db.query(params).promise();
 
   if (result.Count) {
     connection.connect(err => {
       if (err) {
         throw(err);
       }
-      queryDB(`INSERT INTO keywords (keyword) VALUES ('SAMSON')`);
-      queryDB(`INSERT INTO emails (email) VALUES ('dev-test-user@njs.bike')`)
+      queryDB(`INSERT INTO keywords (keyword) VALUES ('BIKE')`);
+      queryDB(`INSERT INTO emails (email) VALUES ('dev-test-user@njs.bike')`);
       connection.end()
     })
     deleteFromDB('UserHashTable', result.Items[0]);
-    return response = "Your keywords have been added to your subscription list. You'll recieve an email when these items are added to the website."
   } else {
     statusCode = 404;
-    return response = "Your confirmation link is dead. Please fill out the keyword form again and click the link within a minute of receiving your email. :)"
+    response = "Your confirmation link is dead. Please fill out the keyword form again and click the link within a minute of receiving your email. :)"
   }
 
   return returnResponse(statusCode, response)
