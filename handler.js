@@ -170,16 +170,19 @@ const deleteFromDB = async (tableName, key) => {
 }
 
 const queryDB = (query, values = []) => {
-  connection.query(query, (err, res) => {
-    if (err) {
-      if (err.code !== 'ER_DUP_ENTRY') {
-        connection.end()
-        console.log(err);
-        throw(err);
+  return new Promise((resolve, reject) => {
+    connection.query(query, async (err, res) => {
+      if (err) {
+        if (err.code !== 'ER_DUP_ENTRY') {
+          connection.end()
+          console.log(err);
+          reject(err);
+        }
+        if (err.code === 'ER_DUP_ENTRY') console.log('Just a dupe entry! Handled by DB engine :)')
       }
-      if (err.code === 'ER_DUP_ENTRY') console.log('Just a dupe entry! Handled by DB engine :)')
-    }
-    console.log(res);
+      resolve(res);
+      console.log(res);
+    })
   })
 }
 
@@ -194,7 +197,8 @@ module.exports.getKeywordsFromDB = async (event) => {
 }
 
 module.exports.updateKeywords = async (event) => {
-  var keywords = event['queryStringParameters']['keywords'];
+  var keywords = event['queryStringParameters']['keywords'].split(',');
+  var email = event['queryStringParameters']['email'];
   var response = "Your keywords have been added to your subscription list. You'll recieve an email when associated items are added to the website.";
   var statusCode = 200;
 
@@ -215,18 +219,16 @@ module.exports.updateKeywords = async (event) => {
   const result = await db.query(params).promise();
 
   if (result.Count) {
-    connection.connect(err => {
-      if (err) {
-        throw(err);
-      }
-      queryDB(`INSERT INTO keywords (keyword) VALUES ('BIKE')`);
-      queryDB(`INSERT INTO emails (email) VALUES ('dev-test-user@njs.bike')`);
-      queryDB(`INSERT INTO subscriptions (keyword_id_fk, email_id_fk) VALUES (
-        (SELECT keyword_id FROM keywords WHERE keyword = 'BIKE'),
-        (SELECT email_id FROM emails WHERE email = 'dev-test-user@njs.bike'));`
+    for (let keyword of keywords) {
+      console.log(keyword)
+      await queryDB(`INSERT INTO keywords (keyword) VALUES ('${keyword}')`);
+      await queryDB(`INSERT INTO emails (email) VALUES ('${email}')`);
+      await queryDB(`INSERT INTO subscriptions (keyword_id_fk, email_id_fk) VALUES (
+        (SELECT keyword_id FROM keywords WHERE keyword = '${keyword}'),
+        (SELECT email_id FROM emails WHERE email = '${email}'));`
       );
-      connection.end()
-    })
+    }
+    connection.end();
     deleteFromDB('UserHashTable', result.Items[0]);
   } else {
     statusCode = 404;
