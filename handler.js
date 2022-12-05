@@ -176,6 +176,7 @@ const queryDB = (query, values = []) => {
     if (err) {
       if (err.code !== 'ER_DUP_ENTRY') {
         connection.end()
+        console.log(err);
         throw(err);
       }
       if (err.code === 'ER_DUP_ENTRY') console.log('Just a dupe entry! Handled by DB engine :)')
@@ -222,6 +223,10 @@ module.exports.updateKeywords = async (event) => {
       }
       queryDB(`INSERT INTO keywords (keyword) VALUES ('BIKE')`);
       queryDB(`INSERT INTO emails (email) VALUES ('dev-test-user@njs.bike')`);
+      queryDB(`INSERT INTO subscriptions (keyword_id_fk, email_id_fk) VALUES (
+        (SELECT keyword_id FROM keywords WHERE keyword = 'BIKE'),
+        (SELECT email_id FROM emails WHERE email = 'dev-test-user@njs.bike'));`
+      );
       connection.end()
     })
     deleteFromDB('UserHashTable', result.Items[0]);
