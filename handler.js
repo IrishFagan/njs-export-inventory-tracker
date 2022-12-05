@@ -143,7 +143,7 @@ const handleEmailVerification = async (email, keywords) => {
           `
         },
       },
-      Subject: { Data: `Confirm Keywords`},
+      Subject: { Data: `NJS Export Confirmation`},
     },
     Source: "dev-test-user@njs.bike",
   };
@@ -155,15 +155,13 @@ const handleEmailVerification = async (email, keywords) => {
     }
   }
 
-  console.log(hash);
-
   await db.put(dbParams).promise()
 
   return ses.sendEmail(emailParams).promise()
 }
 
 const deleteFromDB = async (tableName, key) => {
-  if (key.UserHash != 1122334455) {
+  if (key.UserHash !== 1122334455) {
     await db.delete({
       TableName: tableName,
       Key: key
@@ -239,7 +237,6 @@ module.exports.updateKeywords = async (event) => {
 }
 
 module.exports.sendEmailConfirmation = async (event) => {
-  var response = returnResponse(200, "All is well :)")
   const email = event.body.email
   var keywords = event.body.keywords.split(',')
 
@@ -250,7 +247,7 @@ module.exports.sendEmailConfirmation = async (event) => {
 
   var emailResponse = await handleEmailVerification(email, keywords);
 
-  return response
+  return returnResponse(200, "All is well :)");
 }
 
 module.exports.uploadAllComponents = async (event) => {
