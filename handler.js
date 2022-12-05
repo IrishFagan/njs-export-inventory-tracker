@@ -74,7 +74,7 @@ const uploadComponentType = async (componentName) => {
   const formattedComponents = await getFormattedComponents(componentName);
   var promises = [];
 
-  for (var i = 1; i <= (Math.ceil(Math.max(await formattedComponents.length) / 20) * 20); i++) {
+  for (let i = 1; i <= (Math.ceil(Math.max(await formattedComponents.length) / 20) * 20); i++) {
     if (i % 20 === 0) {
       var params = {
         RequestItems: {
@@ -197,10 +197,10 @@ module.exports.getKeywordsFromDB = async (event) => {
 }
 
 module.exports.updateKeywords = async (event) => {
-  var keywords = event['queryStringParameters']['keywords'].split(',');
-  var email = event['queryStringParameters']['email'];
-  var response = "Your keywords have been added to your subscription list. You'll recieve an email when associated items are added to the website.";
-  var statusCode = 200;
+  const keywords = event['queryStringParameters']['keywords'].split(',');
+  const email = event['queryStringParameters']['email'];
+  const response = "Your keywords have been added to your subscription list. You'll recieve an email when associated items are added to the website.";
+  const statusCode = 200;
 
   const params = {
     TableName: 'UserHashTable',
@@ -276,7 +276,7 @@ module.exports.uploadAllComponents = async (event) => {
     'tools'
   ]
 
-  for (var component of componentNames) {
+  for (let component of componentNames) {
     await uploadComponentType(component);
   }
 }
@@ -316,7 +316,7 @@ module.exports.checkForSpecificComponent = async (event) => {
 
   const records = event['Records']
 
-  for (var record = 0; record < records.length; record++) {
+  for (let record = 0; record < records.length; record++) {
     if(records[record].eventName === 'INSERT') {
       console.log(records[record].dynamodb.NewImage.Title.S)
     }
