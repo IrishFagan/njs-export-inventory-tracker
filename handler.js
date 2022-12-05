@@ -199,8 +199,8 @@ module.exports.getKeywordsFromDB = async (event) => {
 module.exports.updateKeywords = async (event) => {
   const keywords = event['queryStringParameters']['keywords'].split(',');
   const email = event['queryStringParameters']['email'];
-  const response = "Your keywords have been added to your subscription list. You'll recieve an email when associated items are added to the website.";
-  const statusCode = 200;
+  var response = "Your keywords have been added to your subscription list. You'll recieve an email when associated items are added to the website.";
+  var statusCode = 200;
 
   const params = {
     TableName: 'UserHashTable',
@@ -216,9 +216,9 @@ module.exports.updateKeywords = async (event) => {
     }
   }
 
-  const result = await db.query(params).promise();
+  const userHash = await db.query(params).promise();
 
-  if (result.Count) {
+  if (userHash.Count) {
     for (let keyword of keywords) {
       console.log(keyword)
       await queryDB(`INSERT INTO keywords (keyword) VALUES ('${keyword}')`);
@@ -229,7 +229,7 @@ module.exports.updateKeywords = async (event) => {
       );
     }
     connection.end();
-    deleteFromDB('UserHashTable', result.Items[0]);
+    deleteFromDB('UserHashTable', userHash.Items[0]);
   } else {
     statusCode = 404;
     response = "Your confirmation link is dead. Please fill out the keyword form again and click the link within a minute of receiving your email. :)"
