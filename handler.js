@@ -188,14 +188,6 @@ const queryDB = (query, values = []) => {
 
 /* - HANDLER FUNCTIONS - */
 
-module.exports.getKeywordsFromDB = async (event) => {
-  connection.connect((err) => {
-    if (err) throw(err);
-    queryDB(`SELECT keyword FROM keywords`);
-    connection.end()
-  })
-}
-
 module.exports.updateKeywordSubscription = async (event) => {
   const keywords = event['queryStringParameters']['keywords'].split(',');
   const email = event['queryStringParameters']['email'];
@@ -311,7 +303,7 @@ module.exports.getLatestListingDate = async (event) => {
   }
 }
 
-module.exports.checkForSpecificComponent = async (event) => {
+module.exports.checkKeywordSubscription = async (event) => {
   console.log('Invocation means change in table :)');
 
   const records = event['Records']
