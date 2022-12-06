@@ -70,8 +70,8 @@ functions:
             - suffix: .json
           existing: true
     maximumRetryAttempts: 2
-  updateKeywords:
-    handler: handler.updateKeywords
+  updateKeywordSubscription:
+    handler: handler.updateKeywordSubscription
     events:
       - http:
           path: update/keywords/

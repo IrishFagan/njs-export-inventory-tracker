@@ -196,7 +196,7 @@ module.exports.getKeywordsFromDB = async (event) => {
   })
 }
 
-module.exports.updateKeywords = async (event) => {
+module.exports.updateKeywordSubscription = async (event) => {
   const keywords = event['queryStringParameters']['keywords'].split(',');
   const email = event['queryStringParameters']['email'];
   var response = "Your keywords have been added to your subscription list. You'll recieve an email when associated items are added to the website.";
