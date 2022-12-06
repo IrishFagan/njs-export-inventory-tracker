@@ -307,10 +307,15 @@ module.exports.checkKeywordSubscription = async (event) => {
   console.log('Invocation means change in table :)');
 
   const records = event['Records']
+  const keywords = await queryDB(`SELECT keyword FROM keywords`);
 
   for (let record = 0; record < records.length; record++) {
     if(records[record].eventName === 'INSERT') {
-      console.log(records[record].dynamodb.NewImage.Title.S)
+      let recordTitle = records[record].dynamodb.NewImage.Title.S
+      for (let keyword of keywords) {
+        console.log(keyword);
+        console.log(recordTitle.toLowerCase().includes(keyword['keyword'].toLowerCase()))
+      }
     }
   }
 }
