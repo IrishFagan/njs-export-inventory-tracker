@@ -314,7 +314,14 @@ module.exports.checkKeywordSubscription = async (event) => {
       let recordTitle = records[record].dynamodb.NewImage.Title.S
       for (let keyword of keywords) {
         console.log(keyword);
-        console.log(recordTitle.toLowerCase().includes(keyword['keyword'].toLowerCase()))
+        if(recordTitle.toLowerCase().includes(keyword['keyword'].toLowerCase())) {
+          console.log(await queryDB(`SELECT email FROM emails
+                  LEFT JOIN subscriptions
+                  ON subscriptions.email_id_fk = emails.email_id
+                  RIGHT JOIN keywords
+                  ON subscriptions.keyword_id_fk = keywords.keyword_id
+                  WHERE keywords.keyword = '${keyword['keyword']}';`));
+        }
       }
     }
   }
