@@ -186,6 +186,15 @@ const queryDB = (query, values = []) => {
   })
 }
 
+const getSubscriptionEmails = async (keyword) => {
+  return await queryDB(`SELECT email FROM emails
+                  LEFT JOIN subscriptions
+                  ON subscriptions.email_id_fk = emails.email_id
+                  RIGHT JOIN keywords
+                  ON subscriptions.keyword_id_fk = keywords.keyword_id
+                  WHERE keywords.keyword = '${keyword}';`)
+}
+
 /* - HANDLER FUNCTIONS - */
 
 module.exports.updateKeywordSubscription = async (event) => {
@@ -308,6 +317,7 @@ module.exports.checkKeywordSubscription = async (event) => {
 
   const records = event['Records']
   const keywords = await queryDB(`SELECT keyword FROM keywords`);
+  var emails = new Set();
 
   for (let record = 0; record < records.length; record++) {
     if(records[record].eventName === 'INSERT') {
@@ -315,16 +325,13 @@ module.exports.checkKeywordSubscription = async (event) => {
       for (let keyword of keywords) {
         console.log(keyword);
         if(recordTitle.toLowerCase().includes(keyword['keyword'].toLowerCase())) {
-          console.log(await queryDB(`SELECT email FROM emails
-                  LEFT JOIN subscriptions
-                  ON subscriptions.email_id_fk = emails.email_id
-                  RIGHT JOIN keywords
-                  ON subscriptions.keyword_id_fk = keywords.keyword_id
-                  WHERE keywords.keyword = '${keyword['keyword']}';`));
+          const responses = (await getSubscriptionEmails(keyword['keyword']));
+          responses.forEach(response => emails.add(response['email']));
         }
       }
     }
   }
+  console.log(emails);
 }
 
 module.exports.checkNewComponents = async (event) => {
