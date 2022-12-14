@@ -251,7 +251,7 @@ Please click the appropriate link below as well to confirm the addition of these
 
 https://kuwsmvuodh.execute-api.us-west-2.amazonaws.com/dev/update/keywords?hash=${hash}&keywords=${keywords}&email=${email.replace("@","%40")}
     `,
-    `NJS Export Confirmation`
+    `njs.bike - Keyword Confirmation`
   );
 
   return returnResponse(200, "All is well :)");
@@ -337,7 +337,15 @@ module.exports.checkKeywordSubscription = async (event) => {
   }
   console.log(emails);
 
-  
+  for (let email of emails) {
+    await sendEmail(
+      email,
+`An item keyword you've subscribed to has been listed on njs-export!
+
+Head on over to https://www.njs.bike.com to see what was recently listed!`,
+      'njs.bike - Keyword Subscription'
+    )
+  }
 }
 
 module.exports.checkNewComponents = async (event) => {
