@@ -124,25 +124,17 @@ const returnResponse = (statusCode, body) => {
   }
 }
 
-const sendEmail = async (email, keywords, hash) => {
+const sendEmail = async (email, body, subject) => {
   var emailParams = {
     Destination: {
       ToAddresses: [email]
     },
     Message: {
       Body: {
-        Text: { Data: 
-          `Please confirm you'd like to subscribe to these keywords:
-          ${keywords}
-
-          Please click the appropriate link below as well to confirm the addition of these keywords.
-          
-
-          https://kuwsmvuodh.execute-api.us-west-2.amazonaws.com/dev/update/keywords?hash=${hash}&keywords=${keywords}&email=${email.replace("@","%40")}
-          `
+        Text: { Data: body
         },
       },
-      Subject: { Data: `NJS Export Confirmation`},
+      Subject: { Data: subject},
     },
     Source: "dev-test-user@njs.bike",
   };
@@ -246,14 +238,21 @@ module.exports.updateKeywordSubscription = async (event) => {
 module.exports.sendEmailConfirmation = async (event) => {
   const email = event.body.email
   var keywords = event.body.keywords.split(',')
+  const hash = await handleEmailHash(email);
 
   keywords = keywords.filter(keyword => keyword.match(/^[a-z0-9]+$/i))
 
-  console.log('email: ', email);
-  console.log('keywords: ', keywords);
+  await sendEmail(
+    email,
+    `Please confirm you'd like to subscribe to these keywords:
+  ${keywords}
 
-  const hash = await handleEmailHash(email);
-  await sendEmail(email, keywords, hash);
+Please click the appropriate link below as well to confirm the addition of these keywords.          
+
+https://kuwsmvuodh.execute-api.us-west-2.amazonaws.com/dev/update/keywords?hash=${hash}&keywords=${keywords}&email=${email.replace("@","%40")}
+    `,
+    `NJS Export Confirmation`
+  );
 
   return returnResponse(200, "All is well :)");
 }
