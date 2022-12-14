@@ -124,8 +124,7 @@ const returnResponse = (statusCode, body) => {
   }
 }
 
-const handleEmailVerification = async (email, keywords) => {
-  var hash = hashCode(email);
+const sendEmail = async (email, keywords) => {
   var emailParams = {
     Destination: {
       ToAddresses: [email]
@@ -147,6 +146,12 @@ const handleEmailVerification = async (email, keywords) => {
     },
     Source: "dev-test-user@njs.bike",
   };
+
+  return ses.sendEmail(emailParams).promise()
+}
+
+const handleEmailHash = async (email) => {
+  var hash = hashCode(email);
   var dbParams = {
     TableName: 'UserHashTable',
     Item: {
@@ -155,9 +160,7 @@ const handleEmailVerification = async (email, keywords) => {
     }
   }
 
-  await db.put(dbParams).promise()
-
-  return ses.sendEmail(emailParams).promise()
+  return db.put(dbParams).promise()
 }
 
 const deleteFromDB = async (tableName, key) => {
@@ -248,7 +251,8 @@ module.exports.sendEmailConfirmation = async (event) => {
   console.log('email: ', email);
   console.log('keywords: ', keywords);
 
-  var emailResponse = await handleEmailVerification(email, keywords);
+  await sendEmail(email, keywords);
+  await handleEmailHash(email);
 
   return returnResponse(200, "All is well :)");
 }
@@ -332,6 +336,8 @@ module.exports.checkKeywordSubscription = async (event) => {
     }
   }
   console.log(emails);
+
+  
 }
 
 module.exports.checkNewComponents = async (event) => {
