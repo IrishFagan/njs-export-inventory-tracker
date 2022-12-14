@@ -73,21 +73,19 @@ export default function App() {
       />
       <h1 className="text-3xl m-3">Subscribe to Keywords</h1>
       <form className="flex flex-col items-center" onSubmit={handleSubmit}>
-        <label>Enter your email:
-          <input
-            type="text"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-          />
-        </label>
+        <input
+          placeholder="Enter email..."
+          type="text"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+        />
         <br />
-        <label>Enter keywords:
-          <input
-            type="text"
-            value={keywords}
-            onChange={e => handleKeywords(e.target.value)}
-          />
-        </label>
+        <input
+          placeholder="Enter keywords"
+          type="text"
+          value={keywords}
+          onChange={e => handleKeywords(e.target.value)}
+        />
         <br />
         <input type="submit" />
       </form>
