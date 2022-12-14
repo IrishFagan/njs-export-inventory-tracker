@@ -124,7 +124,7 @@ const returnResponse = (statusCode, body) => {
   }
 }
 
-const sendEmail = async (email, keywords) => {
+const sendEmail = async (email, keywords, hash) => {
   var emailParams = {
     Destination: {
       ToAddresses: [email]
@@ -160,7 +160,8 @@ const handleEmailHash = async (email) => {
     }
   }
 
-  return db.put(dbParams).promise()
+  await db.put(dbParams).promise()
+  return hash;
 }
 
 const deleteFromDB = async (tableName, key) => {
@@ -251,8 +252,8 @@ module.exports.sendEmailConfirmation = async (event) => {
   console.log('email: ', email);
   console.log('keywords: ', keywords);
 
-  await sendEmail(email, keywords);
-  await handleEmailHash(email);
+  const hash = await handleEmailHash(email);
+  await sendEmail(email, keywords, hash);
 
   return returnResponse(200, "All is well :)");
 }
