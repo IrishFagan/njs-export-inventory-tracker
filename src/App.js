@@ -61,7 +61,18 @@ export default function App() {
   return(
     <div className="font-mono font-medium">
       <h1 className="text-5xl italic m-4">NJS Export Inventory Tracker</h1>
-      <form onSubmit={handleSubmit}>
+      <DateSelector
+        getComponentByDate={getComponentByDate}
+        setListingDate={setListingDate}
+        listingDate={listingDate}
+      />
+      <ComponentList
+        component={components}
+        componentName="Components"
+        listingDate={listingDate}
+      />
+      <h1 className="text-3xl m-3">Subscribe to Keywords</h1>
+      <form className="flex flex-col items-center" onSubmit={handleSubmit}>
         <label>Enter your email:
           <input
             type="text"
@@ -80,16 +91,6 @@ export default function App() {
         <br />
         <input type="submit" />
       </form>
-      <DateSelector
-        getComponentByDate={getComponentByDate}
-        setListingDate={setListingDate}
-        listingDate={listingDate}
-      />
-      <ComponentList
-        component={components}
-        componentName="Components"
-        listingDate={listingDate}
-      />
     </div>
   );
 }
