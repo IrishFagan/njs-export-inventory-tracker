@@ -1,7 +1,7 @@
 <h1 align="center"> NJS-Export Inventory Tracker</h1>
 <h3 align="center">njs.bike is a website to track inventory from njs-export</h3>
 
-<img src="https://raw.github.com/IrishFagan/njs-export-inventory-tracker/main/images/njs-preview">
+<img src="images/njs-preview">
 
 <h2>Newly Listed Components</h2>
 
