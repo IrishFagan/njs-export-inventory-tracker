@@ -177,9 +177,12 @@ const queryDB = (query, values = []) => {
         if (err.code === 'ER_DUP_ENTRY') console.log('Just a dupe entry! Handled by DB engine :)')
       }
       resolve(res);
-      console.log(res);
     })
   })
+}
+
+const escape = (input) => {
+  return connection.escape(input)
 }
 
 const getSubscriptionEmails = async (keyword) => {
@@ -188,7 +191,7 @@ const getSubscriptionEmails = async (keyword) => {
                   ON subscriptions.email_id_fk = emails.email_id
                   RIGHT JOIN keywords
                   ON subscriptions.keyword_id_fk = keywords.keyword_id
-                  WHERE keywords.keyword = '${keyword}';`)
+                  WHERE keywords.keyword = ${escape(keyword)};`)
 }
 
 /* - HANDLER FUNCTIONS - */
@@ -218,11 +221,11 @@ module.exports.updateKeywordSubscription = async (event) => {
   if (userHash.Count) {
     for (let keyword of keywords) {
       console.log(keyword)
-      await queryDB(`INSERT INTO keywords (keyword) VALUES ('${keyword}')`);
-      await queryDB(`INSERT INTO emails (email) VALUES ('${email}')`);
+      await queryDB(`INSERT INTO keywords (keyword) VALUES (${escape(keyword)})`);
+      await queryDB(`INSERT INTO emails (email) VALUES (${escape(email)})`);
       await queryDB(`INSERT INTO subscriptions (keyword_id_fk, email_id_fk) VALUES (
-        (SELECT keyword_id FROM keywords WHERE keyword = '${keyword}'),
-        (SELECT email_id FROM emails WHERE email = '${email}'));`
+        (SELECT keyword_id FROM keywords WHERE keyword = ${escape(keyword)}),
+        (SELECT email_id FROM emails WHERE email = ${escape(email)}));`
       );
     }
     connection.end();
@@ -342,7 +345,7 @@ module.exports.checkKeywordSubscription = async (event) => {
       email,
 `An item keyword you've subscribed to has been listed on njs-export!
 
-Head on over to https://www.njs.bike.com to see what was recently listed!`,
+Head on over to https://njs.bike to see what was recently listed!`,
       'njs.bike - Keyword Subscription'
     )
   }
