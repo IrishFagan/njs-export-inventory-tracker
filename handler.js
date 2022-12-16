@@ -197,20 +197,30 @@ const getSubscriptionEmails = async (keyword) => {
 /* - HANDLER FUNCTIONS - */
 
 module.exports.unsubscribe = async (event) => {
-  const email = event['queryStringParameters']['email']
-  const emailRecord = await queryDB(`SELECT email FROM emails WHERE emails.email = ${escape(email)}`);
+  const email = event['queryStringParameters']['email'];
+  const subscriptions = await queryDB(`
+    SELECT * FROM subscriptions
+    INNER JOIN emails
+    ON emails.email_id = subscriptions.email_id_fk
+    WHERE emails.email = ${escape(email)}
+  `);
   
-  if (emailRecord.length === 0) {
+  console.log(subscriptions);
+
+  if (subscriptions.length === 0) {
     connection.end();
-    return returnResponse(404, 'There is no record of this email.');
+    return returnResponse(404, 'There are no subscripitions for this email.');
   } else {
-    await queryDB(`DELETE  subscriptions FROM subscriptions
-                   RIGHT JOIN emails
-                   ON emails.email_id = subscriptions.email_id_fk
-                   WHERE emails.email = ${escape(email)};`)
-    return returnResponse(200, 'Successfully unsubscribed! You will no longer recieve emails unless you re-subscribe.')
-  }
-}
+    await queryDB(`
+      DELETE subscriptions FROM subscriptions
+      RIGHT JOIN emails
+      ON emails.email_id = subscriptions.email_id_fk
+      WHERE emails.email = ${escape(email)};
+    `);
+    connection.end();
+    return returnResponse(200, 'Successfully unsubscribed! You will no longer recieve emails unless you re-subscribe.');
+  };
+};
 
 module.exports.updateKeywordSubscription = async (event) => {
   const keywords = event['queryStringParameters']['keywords'].split(',');
