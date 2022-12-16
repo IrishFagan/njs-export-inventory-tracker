@@ -196,6 +196,16 @@ const getSubscriptionEmails = async (keyword) => {
 
 /* - HANDLER FUNCTIONS - */
 
+module.exports.unsubscribe = async (event) => {
+  const email = event['queryStringParameters']['email']
+  const emailRecord = await queryDB(`SELECT email FROM emails WHERE emails.email = ${escape(email)}`);
+  
+  if (emailRecord.length === 0) {
+    connection.end();
+    return returnResponse(404, 'There is no record of this email.');
+  }
+}
+
 module.exports.updateKeywordSubscription = async (event) => {
   const keywords = event['queryStringParameters']['keywords'].split(',');
   const email = event['queryStringParameters']['email'];
