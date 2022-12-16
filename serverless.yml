@@ -38,6 +38,16 @@ provider:
           Resource: '*'
 
 functions:
+  unsubscribe:
+    handler: handler.unsubscribe
+    events:
+      - http:
+          path: unsubscribe/
+          method: GET
+          request:
+            parameters:
+              querystrings:
+                email: true
   getKeywordsFromDB:
     handler: handler.getKeywordsFromDB
   sendEmailConfirmation:
