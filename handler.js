@@ -113,14 +113,19 @@ const getLatestListingDate = async () => {
     .then((res) => res.data.products[0].variants[0].created_at)
 }
 
-const returnResponse = (statusCode, body) => {
+const returnResponse = (statusCode, body, type = 'applicaton/json') => {
   return {
     statusCode: statusCode,
-    body: JSON.stringify(
+    headers: {
+      "Content-Type": type
+    },
+    body: type === 'applicaiton/json' ?
+    JSON.stringify(
       {
         body: body
       }
-    )
+    ) :
+    body
   }
 }
 
