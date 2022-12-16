@@ -187,11 +187,11 @@ const escape = (input) => {
 
 const getSubscriptionEmails = async (keyword) => {
   return await queryDB(`SELECT email FROM emails
-                  LEFT JOIN subscriptions
-                  ON subscriptions.email_id_fk = emails.email_id
-                  RIGHT JOIN keywords
-                  ON subscriptions.keyword_id_fk = keywords.keyword_id
-                  WHERE keywords.keyword = ${escape(keyword)};`)
+                        LEFT JOIN subscriptions
+                        ON subscriptions.email_id_fk = emails.email_id
+                        RIGHT JOIN keywords
+                        ON subscriptions.keyword_id_fk = keywords.keyword_id
+                        WHERE keywords.keyword = ${escape(keyword)};`);
 }
 
 /* - HANDLER FUNCTIONS - */
@@ -203,6 +203,12 @@ module.exports.unsubscribe = async (event) => {
   if (emailRecord.length === 0) {
     connection.end();
     return returnResponse(404, 'There is no record of this email.');
+  } else {
+    await queryDB(`DELETE  subscriptions FROM subscriptions
+                   RIGHT JOIN emails
+                   ON emails.email_id = subscriptions.email_id_fk
+                   WHERE emails.email = ${escape(email)};`)
+    return returnResponse(200, 'Successfully unsubscribed! You will no longer recieve emails unless you re-subscribe.')
   }
 }
 
