@@ -177,21 +177,50 @@ const queryDB = (query, values = []) => {
         if (err.code === 'ER_DUP_ENTRY') console.log('Just a dupe entry! Handled by DB engine :)')
       }
       resolve(res);
-      console.log(res);
     })
   })
 }
 
+const escape = (input) => {
+  return connection.escape(input)
+}
+
 const getSubscriptionEmails = async (keyword) => {
   return await queryDB(`SELECT email FROM emails
-                  LEFT JOIN subscriptions
-                  ON subscriptions.email_id_fk = emails.email_id
-                  RIGHT JOIN keywords
-                  ON subscriptions.keyword_id_fk = keywords.keyword_id
-                  WHERE keywords.keyword = '${keyword}';`)
+                        LEFT JOIN subscriptions
+                        ON subscriptions.email_id_fk = emails.email_id
+                        RIGHT JOIN keywords
+                        ON subscriptions.keyword_id_fk = keywords.keyword_id
+                        WHERE keywords.keyword = ${escape(keyword)};`);
 }
 
 /* - HANDLER FUNCTIONS - */
+
+module.exports.unsubscribe = async (event) => {
+  const email = event['queryStringParameters']['email'];
+  const subscriptions = await queryDB(`
+    SELECT * FROM subscriptions
+    INNER JOIN emails
+    ON emails.email_id = subscriptions.email_id_fk
+    WHERE emails.email = ${escape(email)}
+  `);
+  
+  console.log(subscriptions);
+
+  if (subscriptions.length === 0) {
+    connection.end();
+    return returnResponse(404, 'There are no subscripitions for this email.');
+  } else {
+    await queryDB(`
+      DELETE subscriptions FROM subscriptions
+      RIGHT JOIN emails
+      ON emails.email_id = subscriptions.email_id_fk
+      WHERE emails.email = ${escape(email)};
+    `);
+    connection.end();
+    return returnResponse(200, 'Successfully unsubscribed! You will no longer recieve emails unless you re-subscribe.');
+  };
+};
 
 module.exports.updateKeywordSubscription = async (event) => {
   const keywords = event['queryStringParameters']['keywords'].split(',');
@@ -218,11 +247,11 @@ module.exports.updateKeywordSubscription = async (event) => {
   if (userHash.Count) {
     for (let keyword of keywords) {
       console.log(keyword)
-      await queryDB(`INSERT INTO keywords (keyword) VALUES ('${keyword}')`);
-      await queryDB(`INSERT INTO emails (email) VALUES ('${email}')`);
+      await queryDB(`INSERT INTO keywords (keyword) VALUES (${escape(keyword)})`);
+      await queryDB(`INSERT INTO emails (email) VALUES (${escape(email)})`);
       await queryDB(`INSERT INTO subscriptions (keyword_id_fk, email_id_fk) VALUES (
-        (SELECT keyword_id FROM keywords WHERE keyword = '${keyword}'),
-        (SELECT email_id FROM emails WHERE email = '${email}'));`
+        (SELECT keyword_id FROM keywords WHERE keyword = ${escape(keyword)}),
+        (SELECT email_id FROM emails WHERE email = ${escape(email)}));`
       );
     }
     connection.end();
@@ -327,8 +356,8 @@ module.exports.checkKeywordSubscription = async (event) => {
     if(records[record].eventName === 'INSERT') {
       let recordTitle = records[record].dynamodb.NewImage.Title.S
       for (let keyword of keywords) {
-        console.log(keyword);
         if(recordTitle.toLowerCase().includes(keyword['keyword'].toLowerCase())) {
+          console.log(keyword)
           const responses = (await getSubscriptionEmails(keyword['keyword']));
           responses.forEach(response => emails.add(response['email']));
         }
@@ -342,7 +371,7 @@ module.exports.checkKeywordSubscription = async (event) => {
       email,
 `An item keyword you've subscribed to has been listed on njs-export!
 
-Head on over to https://www.njs.bike.com to see what was recently listed!`,
+Head on over to https://njs.bike to see what was recently listed!`,
       'njs.bike - Keyword Subscription'
     )
   }
