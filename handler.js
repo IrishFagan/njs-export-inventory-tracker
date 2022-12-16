@@ -356,8 +356,8 @@ module.exports.checkKeywordSubscription = async (event) => {
     if(records[record].eventName === 'INSERT') {
       let recordTitle = records[record].dynamodb.NewImage.Title.S
       for (let keyword of keywords) {
-        console.log(keyword);
         if(recordTitle.toLowerCase().includes(keyword['keyword'].toLowerCase())) {
+          console.log(keyword)
           const responses = (await getSubscriptionEmails(keyword['keyword']));
           responses.forEach(response => emails.add(response['email']));
         }
