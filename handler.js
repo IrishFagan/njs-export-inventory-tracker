@@ -283,12 +283,12 @@ module.exports.sendEmailConfirmation = async (event) => {
 
 Please click the appropriate link below as well to confirm the addition of these keywords.          
 
-https://kuwsmvuodh.execute-api.us-west-2.amazonaws.com/dev/update/keywords?hash=${hash}&keywords=${keywords}&email=${email.replace("@","%40")}
+https://api.njs.bike/update/keywords?hash=${hash}&keywords=${keywords}&email=${email.replace("@","%40")}
 
 
 To no longer recieve notifications about new listings please click the link below.
 
-https://kuwsmvuodh.execute-api.us-west-2.amazonaws.com/dev/unsubscribe?email=${email.replace("@","%40")}`,
+https://api.njs.bike/unsubscribe?email=${email.replace("@","%40")}`,
     `njs.bike - Keyword Confirmation`
   );
 
@@ -385,7 +385,7 @@ Head on over to https://njs.bike to see what was recently listed!
 
 To no longer recieve notifications about new listings please click the link below.
 
-https://kuwsmvuodh.execute-api.us-west-2.amazonaws.com/dev/unsubscribe?email=${email.replace("@","%40")}`,
+https://api.njs.bike/unsubscribe?email=${email.replace("@","%40")}`,
       'njs.bike - Keyword Subscription'
     )
   }
