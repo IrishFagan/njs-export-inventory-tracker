@@ -116,16 +116,11 @@ const getLatestListingDate = async () => {
 const returnResponse = (statusCode, body, type = 'applicaton/json') => {
   return {
     statusCode: statusCode,
-    headers: {
-      "Content-Type": type
-    },
-    body: type === 'applicaiton/json' ?
-    JSON.stringify(
+    body: JSON.stringify(
       {
         body: body
       }
-    ) :
-    body
+    )
   }
 }
 
@@ -213,7 +208,6 @@ module.exports.unsubscribe = async (event) => {
   console.log(subscriptions);
 
   if (subscriptions.length === 0) {
-    connection.end();
     return returnResponse(404, 'There are no subscripitions for this email.');
   } else {
     await queryDB(`
@@ -222,7 +216,6 @@ module.exports.unsubscribe = async (event) => {
       ON emails.email_id = subscriptions.email_id_fk
       WHERE emails.email = ${escape(email)};
     `);
-    connection.end();
     return returnResponse(200, 'Successfully unsubscribed! You will no longer recieve emails unless you re-subscribe.');
   };
 };
