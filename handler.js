@@ -250,9 +250,9 @@ module.exports.updateKeywordSubscription = async (event) => {
     }
   }
 
-  const userHash = await db.query(params).promise();
+  const emailHash = await db.query(params).promise();
 
-  if (userHash.Count) {
+  if (emailHash.Count) {
     for (let keyword of keywords) {
       console.log(keyword)
       await queryDB(`INSERT INTO keywords (keyword) VALUES (${escape(keyword)})`);
@@ -263,7 +263,7 @@ module.exports.updateKeywordSubscription = async (event) => {
       );
     }
     connection.end();
-    deleteFromDB('UserHashTable', userHash.Items[0]);
+    deleteFromDB('UserHashTable', emailHash.Items[0]);
   } else {
     statusCode = 404;
     response = "Your confirmation link is dead. Please fill out the keyword form again and click the link within a minute of receiving your email. :)"
