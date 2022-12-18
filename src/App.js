@@ -60,7 +60,11 @@ export default function App() {
 
   return(
     <div className="font-mono font-medium">
-      <h1 className="text-5xl italic m-4">NJS Export Inventory Tracker</h1>
+        <h1 className="inline flex justify-center text-5xl italic m-4">
+          <a className="header-link" href="https://njs.bike">
+            NJS Export Inventory Tracker
+          </a>
+        </h1>
       <DateSelector
         getComponentByDate={getComponentByDate}
         setListingDate={setListingDate}

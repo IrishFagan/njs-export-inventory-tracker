@@ -37,7 +37,7 @@
   }
 }
 
-h1 {
+h1, .header-link{
   text-align: center;
   -webkit-text-stroke-width: 1px;
   -webkit-text-fill-color: white;
