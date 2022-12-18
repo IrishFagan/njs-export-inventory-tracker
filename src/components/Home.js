@@ -19,7 +19,7 @@ export default function Home() {
     setComponents([]);
     axios
       .get(`https://kuwsmvuodh.execute-api.us-west-2.amazonaws.com/dev/get?date=${(date ? date : listingDate)}`)
-      .then(res => setComponents(res.data.data.Items))
+      .then(res => setComponents(res.data.body.Items))
   }
 
   const handleSubmit = async (event) => {
