@@ -3,6 +3,7 @@ import axios from 'axios';
 import './App.css';
 import ComponentList from './components/ComponentList';
 import DateSelector from './components/DateSelector';
+import Header from './components/Header';
 
 export default function App() {
   const [listingDate, setListingDate] = useState(new Date().toDateString());
@@ -60,11 +61,7 @@ export default function App() {
 
   return(
     <div className="font-mono font-medium">
-        <h1 className="inline flex justify-center text-5xl italic m-4">
-          <a className="header-link" href="https://njs.bike">
-            NJS Export Inventory Tracker
-          </a>
-        </h1>
+      <Header/>
       <DateSelector
         getComponentByDate={getComponentByDate}
         setListingDate={setListingDate}
