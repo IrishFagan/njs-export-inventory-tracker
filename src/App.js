@@ -49,7 +49,7 @@ export default function App() {
     const getLatestListingDate = async () => {
       const latestListingDate = await axios
           .get('https://hwf43ohf0h.execute-api.us-west-2.amazonaws.com/latest')
-          .then((res) => formatDate(res.data.latestListingDate))
+          .then((res) => formatDate(res.data.body))
 
       setListingDate(latestListingDate)
       getComponentByDate(latestListingDate);
