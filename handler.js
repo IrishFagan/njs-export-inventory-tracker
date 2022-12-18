@@ -324,18 +324,7 @@ module.exports.uploadAllComponents = async (event) => {
 module.exports.getComponentsByDate = async (event) => {
   const data = await getComponentsByDate(event['queryStringParameters']['date'])
 
-  return {
-    statusCode: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Credentials': true,
-    },
-    body: JSON.stringify(
-      {
-        data: data
-      }
-    )
-  }
+  return jsonResponse(200, data);
 }
 
 module.exports.getLatestListingDate = async (event) => {
