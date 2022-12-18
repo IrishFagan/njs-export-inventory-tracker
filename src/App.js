@@ -6,13 +6,21 @@ import ComponentList from './components/ComponentList';
 import DateSelector from './components/DateSelector';
 import Header from './components/Header';
 import Home from './components/Home';
+import Unsubscribe from './pages/Unsubscribe';
 
 export default function App() {
   return(
     <div className="font-mono font-medium">
       <Header/>
       <Routes>
-        <Route path="/" element={ <Home /> } />
+        <Route 
+          path="/" 
+          element={ <Home /> }
+        />
+        <Route 
+          path="/unsubscribe"
+          element={ <Unsubscribe /> }
+        />
       </Routes>
     </div>
   );
