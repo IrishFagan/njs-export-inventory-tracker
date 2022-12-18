@@ -113,7 +113,17 @@ const getLatestListingDate = async () => {
     .then((res) => res.data.products[0].variants[0].created_at)
 }
 
-const returnResponse = (statusCode, body, type = 'applicaton/json') => {
+const htmlResponse = (statusCode, html) => {
+  return {
+    statusCode: statusCode,
+    body: html,
+    headers: {
+      "Content-Type": "text/html"
+    }
+  }
+}
+
+const jsonResponse = (statusCode, body) => {
   return {
     statusCode: statusCode,
     body: JSON.stringify(
@@ -208,7 +218,7 @@ module.exports.unsubscribe = async (event) => {
   console.log(subscriptions);
 
   if (subscriptions.length === 0) {
-    return returnResponse(404, 'There are no subscripitions for this email.');
+    return jsonResponse(404, 'There are no subscripitions for this email.');
   } else {
     await queryDB(`
       DELETE subscriptions FROM subscriptions
@@ -216,7 +226,7 @@ module.exports.unsubscribe = async (event) => {
       ON emails.email_id = subscriptions.email_id_fk
       WHERE emails.email = ${escape(email)};
     `);
-    return returnResponse(200, 'Successfully unsubscribed! You will no longer recieve emails unless you re-subscribe.');
+    return jsonResponse(200, 'Successfully unsubscribed! You will no longer recieve emails unless you re-subscribe.');
   };
 };
 
@@ -259,7 +269,7 @@ module.exports.updateKeywordSubscription = async (event) => {
     response = "Your confirmation link is dead. Please fill out the keyword form again and click the link within a minute of receiving your email. :)"
   }
 
-  return returnResponse(statusCode, response)
+  return jsonResponse(statusCode, response)
 }
 
 module.exports.sendEmailConfirmation = async (event) => {
@@ -285,7 +295,7 @@ https://api.njs.bike/unsubscribe?email=${email.replace("@","%40")}`,
     `njs.bike - Keyword Confirmation`
   );
 
-  return returnResponse(200, "All is well :)");
+  return jsonResponse(200, "All is well :)");
 }
 
 module.exports.uploadAllComponents = async (event) => {
