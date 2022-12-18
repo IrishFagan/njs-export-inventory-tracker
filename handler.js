@@ -345,16 +345,7 @@ module.exports.getComponentsByDate = async (event) => {
 }
 
 module.exports.getLatestListingDate = async (event) => {
-  return {
-    statusCode: 200,
-    body: JSON.stringify(
-      {  
-        latestListingDate: await getLatestListingDate()
-      },
-      null,
-      2
-    ),
-  }
+  return jsonResponse(200, await getLatestListingDate())
 }
 
 module.exports.checkKeywordSubscription = async (event) => {
