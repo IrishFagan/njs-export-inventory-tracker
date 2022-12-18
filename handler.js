@@ -152,7 +152,7 @@ const sendEmail = async (email, body, subject) => {
   return ses.sendEmail(emailParams).promise()
 }
 
-const handleEmailHash = async (email) => {
+const emailHash = async (email) => {
   var hash = hashCode(email);
   var dbParams = {
     TableName: 'UserHashTable',
@@ -275,7 +275,7 @@ module.exports.updateKeywordSubscription = async (event) => {
 module.exports.sendEmailConfirmation = async (event) => {
   const email = event.body.email
   var keywords = event.body.keywords.split(',')
-  const hash = await handleEmailHash(email);
+  const hash = await emailHash(email);
 
   keywords = keywords.filter(keyword => keyword.match(/^[a-z0-9]+$/i))
 
