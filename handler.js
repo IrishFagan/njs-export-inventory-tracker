@@ -203,9 +203,11 @@ const getSubscriptionEmails = async (keyword) => {
 module.exports.unsubscribe = async (event) => {
   const email = event['queryStringParameters']['email'];
   const subscriptions = await queryDB(`
-    SELECT * FROM subscriptions
-    INNER JOIN emails
-    ON emails.email_id = subscriptions.email_id_fk
+    SELECT keyword FROM keywords
+    LEFT JOIN subscriptions
+    ON subscriptions.keyword_id_fk = keywords.keyword_id
+    RIGHT JOIN emails
+    ON subscriptions.email_id_fk = emails.email_id
     WHERE emails.email = ${escape(email)}
   `);
   
@@ -214,13 +216,7 @@ module.exports.unsubscribe = async (event) => {
   if (subscriptions.length === 0) {
     return jsonResponse(404, 'There are no subscripitions for this email.');
   } else {
-    await queryDB(`
-      DELETE subscriptions FROM subscriptions
-      RIGHT JOIN emails
-      ON emails.email_id = subscriptions.email_id_fk
-      WHERE emails.email = ${escape(email)};
-    `);
-    return jsonResponse(200, 'Successfully unsubscribed! You will no longer recieve emails unless you re-subscribe.');
+    return jsonResponse(200, subscriptions);
   };
 };
 
