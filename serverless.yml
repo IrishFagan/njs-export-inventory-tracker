@@ -51,6 +51,18 @@ functions:
                 email: true
                 keywords: true
                 hash: true
+  subscribe:
+    handler: handler.subscribe
+    events:
+      - http:
+          path: subscribe
+          method: GET
+          request:
+            parameters:
+              querystrings:
+                hash: true
+                keywords: true
+                email: true
   getKeywords:
     handler: handler.getKeywords
     events:
@@ -90,18 +102,6 @@ functions:
             - suffix: .json
           existing: true
     maximumRetryAttempts: 2
-  updateKeywordSubscription:
-    handler: handler.updateKeywordSubscription
-    events:
-      - http:
-          path: update/keywords/
-          method: GET
-          request:
-            parameters:
-              querystrings:
-                hash: true
-                keywords: true
-                email: true
   getComponentsByDate:
     handler: handler.getComponentsByDate
     events:

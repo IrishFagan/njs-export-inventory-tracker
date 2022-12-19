@@ -279,7 +279,7 @@ module.exports.getKeywords = async (event) => {
   };
 };
 
-module.exports.updateKeywordSubscription = async (event) => {
+module.exports.subscribe = async (event) => {
   const keywords = filter('keywords', event['queryStringParameters']['keywords'])
   const email = decrypt(event['queryStringParameters']['email']);
   var response = "Your keywords have been added to your subscription list. You'll recieve an email when associated items are added to the website.";
@@ -336,7 +336,7 @@ module.exports.sendEmailConfirmation = async (event) => {
 
 Please click the appropriate link below as well to confirm the addition of these keywords.          
 
-https://api.njs.bike/update/keywords?hash=${hash}&keywords=${keywords}&email=${encrypt(email)}
+https://api.njs.bike/subscribe?hash=${hash}&keywords=${keywords}&email=${encrypt(email)}
 
 
 To no longer recieve notifications about new listings please click the link below.
