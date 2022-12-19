@@ -48,6 +48,8 @@ functions:
             parameters:
               querystrings:
                 email: true
+                keywords: true
+                hash: true
   getKeywords:
     handler: handler.getKeywords
     events:
