@@ -171,7 +171,7 @@ const deleteFromDB = async (tableName, key) => {
 
 const queryDB = (query, values = []) => {
   return new Promise((resolve, reject) => {
-    connection.query(query, async (err, res) => {
+    connection.query(query, values ,async (err, res) => {
       if (err) {
         if (err.code !== 'ER_DUP_ENTRY') {
           connection.end()
@@ -195,7 +195,7 @@ const getSubscriptionEmails = async (keyword) => {
                         ON subscriptions.email_id_fk = emails.email_id
                         RIGHT JOIN keywords
                         ON subscriptions.keyword_id_fk = keywords.keyword_id
-                        WHERE keywords.keyword = ${escape(keyword)};`);
+                        WHERE keywords.keyword = ?;`, [keyword]);
 }
 
 /* - HANDLER FUNCTIONS - */
@@ -229,9 +229,8 @@ module.exports.unsubscribe = async (event) => {
         ON emails.email_id = subscriptions.email_id_fk
         INNER JOIN keywords
         ON keywords.keyword_id = subscriptions.keyword_id_fk
-        WHERE emails.email = ${escape(email)}
-        AND keywords.keyword = ${escape(keyword)};
-      `)
+        WHERE emails.email = ?
+        AND keywords.keyword = ?;`, [email, keyword]);
     }
     deleteFromDB('UserHashTable', emailHash.Items[0]);
     return jsonResponse(200, 'Successfully unsubscribed from selected keywords!')
@@ -248,8 +247,7 @@ module.exports.getKeywords = async (event) => {
     ON subscriptions.keyword_id_fk = keywords.keyword_id
     RIGHT JOIN emails
     ON subscriptions.email_id_fk = emails.email_id
-    WHERE emails.email = ${escape(email)}
-  `);
+    WHERE emails.email = ?;`, [email]);
   
   console.log(subscriptions);
 
@@ -285,12 +283,11 @@ module.exports.updateKeywordSubscription = async (event) => {
   if (emailHash.Count) {
     for (let keyword of keywords) {
       console.log(keyword)
-      await queryDB(`INSERT INTO keywords (keyword) VALUES (${escape(keyword)})`);
-      await queryDB(`INSERT INTO emails (email) VALUES (${escape(email)})`);
+      await queryDB(`INSERT INTO keywords (keyword) VALUES (?)`, [keyword]);
+      await queryDB(`INSERT INTO emails (email) VALUES (email)`, [email]);
       await queryDB(`INSERT INTO subscriptions (keyword_id_fk, email_id_fk) VALUES (
-        (SELECT keyword_id FROM keywords WHERE keyword = ${escape(keyword)}),
-        (SELECT email_id FROM emails WHERE email = ${escape(email)}));`
-      );
+        (SELECT keyword_id FROM keywords WHERE keyword = ?),
+        (SELECT email_id FROM emails WHERE email = ?));`, [keyword, email]);
     }
     connection.end();
     deleteFromDB('UserHashTable', emailHash.Items[0]);
