@@ -20,11 +20,13 @@ const table = "NJS-ExportInventory";
 /* - HELPER FUNCTIONS - */
 
 const encrypt = (string) => {
-  return crypto.AES.encrypt(string, process.env.CRYPTO_SECRET).toString();
+  var encrypted = crypto.AES.encrypt(string, process.env.CRYPTO_SECRET).toString();
+  return crypto.enc.Base64.parse(encrypted).toString(crypto.enc.Hex);
 }
 
 const decrypt = (string) => {
-  return crypto.AES.decrypt(string, process.env.CRYPTO_SECRET).toString(crypto.enc.Utf8);
+  var decoded = crypto.enc.Hex.parse(string).toString(crypto.enc.Base64);
+  return crypto.AES.decrypt(decoded, process.env.CRYPTO_SECRET).toString(crypto.enc.Utf8);
 }
 
 const hashCode = (string) => {
@@ -266,6 +268,8 @@ module.exports.getKeywords = async (event) => {
     ON subscriptions.email_id_fk = emails.email_id
     WHERE emails.email = ?;`, [email]);
   
+  console.log(event['queryStringParameters']['email'])
+  console.log(email);
   console.log(subscriptions);
 
   if (subscriptions.length === 0) {
