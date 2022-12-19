@@ -15,6 +15,7 @@ provider:
   layers:
     - arn:aws:lambda:us-west-2:740451665580:layer:axiosLayer:2
     - arn:aws:lambda:us-west-2:740451665580:layer:mysql:2
+    - arn:aws:lambda:us-west-2:740451665580:layer:crypto-js:2
   timeout: 29
   iam:
     role:
