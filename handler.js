@@ -216,7 +216,7 @@ const getSubscriptionEmails = async (keyword) => {
 /* - HANDLER FUNCTIONS - */
 
 module.exports.unsubscribe = async (event) => {
-  const email = event['queryStringParameters']['email']
+  const email = decrypt(event['queryStringParameters']['email']);
   const hash = event['queryStringParameters']['hash']
   const keywords = event['queryStringParameters']['keywords']
   const params = {
@@ -232,6 +232,8 @@ module.exports.unsubscribe = async (event) => {
       '#timetolive': 'ttl'
     }
   }
+
+  console.log(email)
 
   const emailHash = await db.query(params).promise()
 
@@ -255,7 +257,7 @@ module.exports.unsubscribe = async (event) => {
 }
 
 module.exports.getKeywords = async (event) => {
-  const email = event['queryStringParameters']['email'];
+  const email = decrypt(event['queryStringParameters']['email']);
   const subscriptions = await queryDB(`
     SELECT keyword FROM keywords
     LEFT JOIN subscriptions
@@ -275,7 +277,7 @@ module.exports.getKeywords = async (event) => {
 
 module.exports.updateKeywordSubscription = async (event) => {
   const keywords = filter('keywords', event['queryStringParameters']['keywords'])
-  const email = event['queryStringParameters']['email'];
+  const email = decrypt(event['queryStringParameters']['email']);
   var response = "Your keywords have been added to your subscription list. You'll recieve an email when associated items are added to the website.";
   var statusCode = 200;
 
@@ -326,7 +328,7 @@ module.exports.sendEmailConfirmation = async (event) => {
 
 Please click the appropriate link below as well to confirm the addition of these keywords.          
 
-https://api.njs.bike/update/keywords?hash=${hash}&keywords=${keywords}&email=${email.replace("@","%40")}
+https://api.njs.bike/update/keywords?hash=${hash}&keywords=${keywords}&email=${encrypt(email.replace("@","%40"))}
 
 
 To no longer recieve notifications about new listings please click the link below.
@@ -336,6 +338,71 @@ https://api.njs.bike/unsubscribe?email=${email.replace("@","%40")}`,
   );
 
   return jsonResponse(200, "All is well :)");
+}
+
+module.exports.checkKeywordSubscription = async (event) => {
+  console.log('Invocation means change in table :)');
+
+  const records = event['Records']
+  const keywords = await queryDB(`SELECT keyword FROM keywords`);
+  var emails = new Set();
+
+  for (let record = 0; record < records.length; record++) {
+    if(records[record].eventName === 'INSERT') {
+      let recordTitle = records[record].dynamodb.NewImage.Title.S
+      for (let keyword of keywords) {
+        if(recordTitle.toLowerCase().includes(keyword['keyword'].toLowerCase())) {
+          console.log(keyword)
+          const responses = (await getSubscriptionEmails(keyword['keyword']));
+          responses.forEach(response => emails.add(response['email']));
+        }
+      }
+    }
+  }
+  console.log(emails);
+
+  for (let email of emails) {
+    await sendEmail(
+      email,
+`An item keyword you've subscribed to has been listed on njs-export!
+
+Head on over to https://njs.bike to see what was recently listed!
+
+
+To no longer recieve notifications about new listings please click the link below.
+
+https://api.njs.bike/unsubscribe?email=${encrypt(email.replace("@","%40"))}`,
+      'njs.bike - Keyword Subscription'
+    )
+  }
+}
+
+module.exports.checkNewComponents = async (event) => {
+  console.log(`Checking for new components at ${new Date()}`);
+  const currentProducts = JSON.stringify(await axios
+      .get('https://njs-export.com/products.json')
+      .then((res) => res.data))
+
+  var params = {
+    Bucket: 'njs-export',
+    Key: 'products/products.json'
+  }
+
+  const savedProducts = (await s3.getObject(params).promise()).Body.toString('utf-8')
+
+  if (savedProducts === currentProducts) {
+    console.log('No new products have been listed!');
+  } else {
+    console.log('New products have been listed. Updating DB with new products.');
+
+    params = {
+      Bucket: 'njs-export',
+      Key: 'products/products.json',
+      Body: currentProducts
+    }
+
+    await s3.putObject(params).promise();
+  }
 }
 
 module.exports.uploadAllComponents = async (event) => {
@@ -375,69 +442,4 @@ module.exports.getComponentsByDate = async (event) => {
 
 module.exports.getLatestListingDate = async (event) => {
   return jsonResponse(200, await getLatestListingDate())
-}
-
-module.exports.checkKeywordSubscription = async (event) => {
-  console.log('Invocation means change in table :)');
-
-  const records = event['Records']
-  const keywords = await queryDB(`SELECT keyword FROM keywords`);
-  var emails = new Set();
-
-  for (let record = 0; record < records.length; record++) {
-    if(records[record].eventName === 'INSERT') {
-      let recordTitle = records[record].dynamodb.NewImage.Title.S
-      for (let keyword of keywords) {
-        if(recordTitle.toLowerCase().includes(keyword['keyword'].toLowerCase())) {
-          console.log(keyword)
-          const responses = (await getSubscriptionEmails(keyword['keyword']));
-          responses.forEach(response => emails.add(response['email']));
-        }
-      }
-    }
-  }
-  console.log(emails);
-
-  for (let email of emails) {
-    await sendEmail(
-      email,
-`An item keyword you've subscribed to has been listed on njs-export!
-
-Head on over to https://njs.bike to see what was recently listed!
-
-
-To no longer recieve notifications about new listings please click the link below.
-
-https://api.njs.bike/unsubscribe?email=${email.replace("@","%40")}`,
-      'njs.bike - Keyword Subscription'
-    )
-  }
-}
-
-module.exports.checkNewComponents = async (event) => {
-  console.log(`Checking for new components at ${new Date()}`);
-  const currentProducts = JSON.stringify(await axios
-      .get('https://njs-export.com/products.json')
-      .then((res) => res.data))
-
-  var params = {
-    Bucket: 'njs-export',
-    Key: 'products/products.json'
-  }
-
-  const savedProducts = (await s3.getObject(params).promise()).Body.toString('utf-8')
-
-  if (savedProducts === currentProducts) {
-    console.log('No new products have been listed!');
-  } else {
-    console.log('New products have been listed. Updating DB with new products.');
-
-    params = {
-      Bucket: 'njs-export',
-      Key: 'products/products.json',
-      Body: currentProducts
-    }
-
-    await s3.putObject(params).promise();
-  }
 }
