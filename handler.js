@@ -200,7 +200,7 @@ const getSubscriptionEmails = async (keyword) => {
 
 /* - HANDLER FUNCTIONS - */
 
-module.exports.unsubscribe = async (event) => {
+module.exports.getKeywords = async (event) => {
   const email = event['queryStringParameters']['email'];
   const subscriptions = await queryDB(`
     SELECT keyword FROM keywords
