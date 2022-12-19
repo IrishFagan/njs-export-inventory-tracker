@@ -189,6 +189,12 @@ const escape = (input) => {
   return connection.escape(input)
 }
 
+const filter = (type, string) => {
+  if (type === 'keywords') {
+    return string.split(',').filter(keyword => keyword.match(/^[a-z0-9]+$/i))
+  }
+}
+
 const getSubscriptionEmails = async (keyword) => {
   return await queryDB(`SELECT email FROM emails
                         LEFT JOIN subscriptions
@@ -259,7 +265,7 @@ module.exports.getKeywords = async (event) => {
 };
 
 module.exports.updateKeywordSubscription = async (event) => {
-  const keywords = event['queryStringParameters']['keywords'].split(',');
+  const keywords = filter('keywords', event['queryStringParameters']['keywords'])
   const email = event['queryStringParameters']['email'];
   var response = "Your keywords have been added to your subscription list. You'll recieve an email when associated items are added to the website.";
   var statusCode = 200;
@@ -301,10 +307,8 @@ module.exports.updateKeywordSubscription = async (event) => {
 
 module.exports.sendEmailConfirmation = async (event) => {
   const email = event.body.email
-  var keywords = event.body.keywords.split(',')
+  var keywords = filter('keywords', event.body.keywords)
   const hash = await emailHash(email);
-
-  keywords = keywords.filter(keyword => keyword.match(/^[a-z0-9]+$/i))
 
   await sendEmail(
     email,
