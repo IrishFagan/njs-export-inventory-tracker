@@ -2,6 +2,7 @@
 const axios = require('axios');
 const AWS = require('aws-sdk');
 const mysql = require('mysql');
+const crypto = require('crypto-js');
 
 const connection = mysql.createConnection({
   host    : process.env.AURORA_HOST,
@@ -17,6 +18,10 @@ const ses = new AWS.SES();
 const table = "NJS-ExportInventory";
 
 /* - HELPER FUNCTIONS - */
+
+const encrypt = (string) => {
+  return crypto.AES.encrypt(string, process.env.CRYPTO_SECRET).toString();
+}
 
 const hashCode = (string) => {
   let hash = 0;
