@@ -7,6 +7,7 @@ import DateSelector from './components/DateSelector';
 import Header from './components/Header';
 import Home from './components/Home';
 import Unsubscribe from './pages/Unsubscribe';
+import Undefined from './pages/Undefined';
 
 export default function App() {
   return(
@@ -20,6 +21,10 @@ export default function App() {
         <Route 
           path="/unsubscribe"
           element={ <Unsubscribe /> }
+        />
+        <Route
+          path="/*"
+          element={ <Undefined /> }
         />
       </Routes>
     </div>
