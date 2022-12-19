@@ -219,7 +219,7 @@ module.exports.unsubscribe = async (event) => {
   }
 
   const emailHash = await db.query(params).promise()
-  
+
   if(emailHash.Count) {
     for (let keyword of keywords) {
       await queryDB(`
@@ -233,6 +233,7 @@ module.exports.unsubscribe = async (event) => {
         AND keywords.keyword = ${escape(keyword)};
       `)
     }
+    deleteFromDB('UserHashTable', emailHash.Items[0]);
     return jsonResponse(200, 'Successfully unsubscribed from selected keywords!')
   } else {
     return jsonResponse(404, 'Your link is dead. Please request another unsubscribe email and fill out the form within a couple of minutes')
