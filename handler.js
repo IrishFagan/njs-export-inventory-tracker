@@ -23,6 +23,10 @@ const encrypt = (string) => {
   return crypto.AES.encrypt(string, process.env.CRYPTO_SECRET).toString();
 }
 
+const decrypt = (string) => {
+  return crypto.AES.decrypt(string, process.env.CRYPTO_SECRET).toString(crypto.enc.Utf8);
+}
+
 const hashCode = (string) => {
   let hash = 0;
   for (let i = 0, len = string.length; i < len; i++) {
