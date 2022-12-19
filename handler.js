@@ -182,7 +182,7 @@ const deleteFromDB = async (tableName, key) => {
 
 const queryDB = (query, values = []) => {
   return new Promise((resolve, reject) => {
-    connection.query(query, values ,async (err, res) => {
+    connection.query(query, values,async (err, res) => {
       if (err) {
         if (err.code !== 'ER_DUP_ENTRY') {
           connection.end()
@@ -301,6 +301,10 @@ module.exports.updateKeywordSubscription = async (event) => {
 
   const emailHash = await db.query(params).promise();
 
+  console.log(event['queryStringParameters']['email'])
+  console.log(email);
+  console.log(keywords);
+
   if (emailHash.Count) {
     for (let keyword of keywords) {
       console.log(keyword)
@@ -332,12 +336,12 @@ module.exports.sendEmailConfirmation = async (event) => {
 
 Please click the appropriate link below as well to confirm the addition of these keywords.          
 
-https://api.njs.bike/update/keywords?hash=${hash}&keywords=${keywords}&email=${encrypt(email.replace("@","%40"))}
+https://api.njs.bike/update/keywords?hash=${hash}&keywords=${keywords}&email=${encrypt(email)}
 
 
 To no longer recieve notifications about new listings please click the link below.
 
-https://api.njs.bike/unsubscribe?email=${email.replace("@","%40")}`,
+https://njs.bike/unsubscribe?email=${encrypt(email)}`,
     `njs.bike - Keyword Confirmation`
   );
 
@@ -375,7 +379,7 @@ Head on over to https://njs.bike to see what was recently listed!
 
 To no longer recieve notifications about new listings please click the link below.
 
-https://api.njs.bike/unsubscribe?email=${encrypt(email.replace("@","%40"))}`,
+https://api.njs.bike/unsubscribe?email=${encrypt(email)}`,
       'njs.bike - Keyword Subscription'
     )
   }
