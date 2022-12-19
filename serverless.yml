@@ -48,8 +48,16 @@ functions:
             parameters:
               querystrings:
                 email: true
-  getKeywordsFromDB:
-    handler: handler.getKeywordsFromDB
+  getKeywords:
+    handler: handler.getKeywords
+    events:
+      - http:
+          path: get/keywords/
+          method: GET
+          request:
+            parameters:
+              querystrings:
+                email: true
   sendEmailConfirmation:
     handler: handler.sendEmailConfirmation
     events:
