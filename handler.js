@@ -341,7 +341,7 @@ https://api.njs.bike/subscribe?hash=${hash}&keywords=${keywords}&email=${encrypt
 
 To no longer recieve notifications about new listings please click the link below.
 
-https://njs.bike/unsubscribe?email=${encrypt(email)}`,
+https://www.njs.bike/unsubscribe/?email=${encrypt(email)}`,
     `njs.bike - Keyword Confirmation`
   );
 
@@ -379,7 +379,7 @@ Head on over to https://njs.bike to see what was recently listed!
 
 To no longer recieve notifications about new listings please click the link below.
 
-https://api.njs.bike/unsubscribe?email=${encrypt(email)}`,
+https://www.njs.bike/unsubscribe/?email=${encrypt(email)}`,
       'njs.bike - Keyword Subscription'
     )
   }
