@@ -252,9 +252,9 @@ module.exports.unsubscribe = async (event) => {
         AND keywords.keyword = ?;`, [email, keyword]);
     }
     deleteFromDB('UserHashTable', emailHash.Items[0]);
-    return jsonResponse(200, 'Successfully unsubscribed from selected keywords!')
+    return jsonResponse(200, 'Success')
   } else {
-    return jsonResponse(404, 'Your link is dead. Please request another unsubscribe email and fill out the form within a couple of minutes')
+    return jsonResponse(200, 'Error')
   }
 }
 
@@ -273,7 +273,7 @@ module.exports.getKeywords = async (event) => {
   console.log(subscriptions);
 
   if (subscriptions.length === 0) {
-    return jsonResponse(404, 'There are no subscripitions for this email.');
+    return jsonResponse(200, []);
   } else {
     return jsonResponse(200, subscriptions);
   };
@@ -284,8 +284,7 @@ module.exports.subscribe = async (event) => {
   const email = decrypt(event['queryStringParameters']['email']);
   const hash = event['queryStringParameters']['hash'];
 
-  var response = "Your keywords have been added to your subscription list. You'll recieve an email when associated items are added to the website.";
-  var statusCode = 200;
+  var response = 'Success';
 
   const params = {
     TableName: 'UserHashTable',
@@ -319,11 +318,10 @@ module.exports.subscribe = async (event) => {
     connection.end();
     deleteFromDB('UserHashTable', emailHash.Items[0]);
   } else {
-    statusCode = 404;
-    response = "Your confirmation link is dead. Please fill out the keyword form again and click the link within a minute of receiving your email. :)"
+    response = 'Error'
   }
 
-  return jsonResponse(statusCode, response)
+  return jsonResponse(200, response)
 }
 
 module.exports.sendEmailConfirmation = async (event) => {
@@ -347,7 +345,7 @@ https://www.njs.bike/unsubscribe/?email=${encrypt(email)}`,
     `njs.bike - Keyword Confirmation`
   );
 
-  return jsonResponse(200, "All is well :)");
+  return jsonResponse(200, 'Success');
 }
 
 module.exports.checkKeywordSubscription = async (event) => {
