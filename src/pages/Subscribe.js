@@ -4,7 +4,7 @@ import axios from 'axios';
 
 export default function Subscribe() {
 	const [queryParams] = useSearchParams();
-	const [status, setStatus] = useState("");
+	const [status, setStatus] = useState(null);
 
 	const email = queryParams.get('email');
 	const keywords = queryParams.get('keywords');
@@ -16,7 +16,7 @@ export default function Subscribe() {
 
 	return (
 		<div>
-			{ status === "" ? <p className="flex justify-center">loading...</p> :
+			{ !status ? <p className="flex justify-center">loading...</p> :
 			<h2>{ status }</h2>
 			}
 		</div>

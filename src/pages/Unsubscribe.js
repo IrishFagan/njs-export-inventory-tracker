@@ -24,7 +24,7 @@ export default function Unsubscribe() {
 		<h2 className="justify-center">Error: Missing parameter 'Email' - Please follow the provided link again</h2> :
 		<div>
 			<ul>
-				{keywords === null ? <li>loading...</li> :
+				{ !keywords ? <li>loading...</li> :
 					keywords.map((keyword, i) =>
 					<li key={i}>
 						{keyword.keyword}
