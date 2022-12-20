@@ -4,6 +4,7 @@ import axios from 'axios';
 
 export default function Subscribe() {
 	const [queryParams] = useSearchParams();
+	const [status, setStatus] = useState("");
 
 	const email = queryParams.get('email');
 	const keywords = queryParams.get('keywords');
@@ -11,5 +12,13 @@ export default function Subscribe() {
 
 	axios
 		.get(`https://api.njs.bike/subscribe?email=${email}&hash=${hash}&keywords=${keywords}`)
-		.then(res => console.log(res.data));
+		.then(res => setStatus(res.data.body));
+
+	return (
+		<div>
+			{ status === "" ? <p className="flex justify-center">loading...</p> :
+			<h2>{ status }</h2>
+			}
+		</div>
+	)
 }
