@@ -8,6 +8,7 @@ import Header from './components/Header';
 import Home from './components/Home';
 import Unsubscribe from './pages/Unsubscribe';
 import Undefined from './pages/Undefined';
+import Subscribe from './pages/Subscribe';
 
 export default function App() {
   return(
