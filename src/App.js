@@ -23,6 +23,10 @@ export default function App() {
           element={ <Unsubscribe /> }
         />
         <Route
+          path="/subscribe"
+          element={ <Subscribe /> }
+        />
+        <Route
           path="/*"
           element={ <Undefined /> }
         />
