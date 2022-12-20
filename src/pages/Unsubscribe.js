@@ -4,7 +4,7 @@ import axios from 'axios'
 
 export default function Unsubscribe() {
 	const [queryParams] = useSearchParams();
-	const [keywords, setKeywords] = useState([]);
+	const [keywords, setKeywords] = useState(null);
 
 	useEffect(() => {
 		const getKeywords = () => {
@@ -24,7 +24,7 @@ export default function Unsubscribe() {
 		<h2 className="justify-center">Error: Missing parameter 'Email' - Please follow the provided link again</h2> :
 		<div>
 			<ul>
-				{keywords.length === 0 ? <li>loading...</li> :
+				{keywords === null ? <li>loading...</li> :
 					keywords.map((keyword, i) =>
 					<li key={i}>
 						{keyword.keyword}
