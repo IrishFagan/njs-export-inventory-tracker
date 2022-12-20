@@ -282,6 +282,8 @@ module.exports.getKeywords = async (event) => {
 module.exports.subscribe = async (event) => {
   const keywords = filter('keywords', event['queryStringParameters']['keywords'])
   const email = decrypt(event['queryStringParameters']['email']);
+  const hash = event['queryStringParameters']['hash'];
+
   var response = "Your keywords have been added to your subscription list. You'll recieve an email when associated items are added to the website.";
   var statusCode = 200;
 
@@ -291,7 +293,7 @@ module.exports.subscribe = async (event) => {
     KeyConditionExpression: 'UserHash = :uh',
     FilterExpression: '#timetolive >= :currentEpoch',
     ExpressionAttributeValues: {
-      ':uh': parseInt(event['queryStringParameters']['hash']),
+      ':uh': parseInt(hash),
       ':currentEpoch': Date.now() / 1000
     },
     ExpressionAttributeNames: {
@@ -336,7 +338,7 @@ module.exports.sendEmailConfirmation = async (event) => {
 
 Please click the appropriate link below as well to confirm the addition of these keywords.          
 
-https://api.njs.bike/subscribe?hash=${hash}&keywords=${keywords}&email=${encrypt(email)}
+https://www.njs.bike/subscribe?hash=${hash}&keywords=${keywords}&email=${encrypt(email)}
 
 
 To no longer recieve notifications about new listings please click the link below.
