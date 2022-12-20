@@ -10,7 +10,7 @@ export default function Unsubscribe() {
 		const getKeywords = () => {
 			if(queryParams.get('email')) {
 				axios
-					.get(`https://api.njs.bike/get/keywords?email=${queryParams.get('email').replace('@','%40')}`)
+					.get(`https://api.njs.bike/get/keywords?email=${queryParams.get('email')}`)
 					.then(res => setKeywords(res.data.body));
 			}
 		};
