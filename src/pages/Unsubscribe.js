@@ -7,6 +7,12 @@ export default function Unsubscribe() {
 	const [keywords, setKeywords] = useState(null);
 	const [isChecked, setIsChecked] = useState([])
 
+	const handleOnChange = (index) => {
+		setIsChecked(
+			isChecked.map((checkbox, i) => i === index ? !checkbox : checkbox
+		))
+	}
+	
 	useEffect(() => {
 		const getKeywords = () => {
 			if(queryParams.get('email')) {
@@ -29,8 +35,13 @@ export default function Unsubscribe() {
 		<div>
 			<ul>
 				{ !keywords ? <li>loading...</li> :
-					keywords.map((keyword, i) =>
-					<li key={i}>
+					keywords.map((keyword, index) =>
+					<li className="align-left" key={index}>
+						<input
+							value={isChecked[index]}
+							type="checkbox"
+							onChange={() => handleOnChange(index)}
+						/>
 						{keyword.keyword}
 					</li>
 				)}
