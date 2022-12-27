@@ -5,13 +5,17 @@ import axios from 'axios'
 export default function Unsubscribe() {
 	const [queryParams] = useSearchParams();
 	const [keywords, setKeywords] = useState(null);
+	const [isChecked, setIsChecked] = useState([])
 
 	useEffect(() => {
 		const getKeywords = () => {
 			if(queryParams.get('email')) {
 				axios
 					.get(`https://api.njs.bike/get/keywords?email=${queryParams.get('email')}`)
-					.then(res => setKeywords(res.data.body));
+					.then(res => {
+						setKeywords(res.data.body)
+						setIsChecked(new Array(res.data.body.length).fill(false))
+					});
 			}
 		};
 
