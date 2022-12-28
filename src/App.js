@@ -9,6 +9,7 @@ import Home from './components/Home';
 import Unsubscribe from './pages/Unsubscribe';
 import Undefined from './pages/Undefined';
 import Subscribe from './pages/Subscribe';
+import ConfirmUnsub from './pages/ConfirmUnsub';
 
 export default function App() {
   return(
@@ -25,7 +26,7 @@ export default function App() {
         />
         <Route
           path="/unsubscribe/confirm"
-          element={ <Unsubscribe /> }
+          element={ <ConfirmUnsub /> }
         />
         <Route
           path="/subscribe"
