@@ -258,27 +258,6 @@ module.exports.unsubscribe = async (event) => {
   }
 }
 
-module.exports.getKeywords = async (event) => {
-  const email = decrypt(event['queryStringParameters']['email']);
-  const subscriptions = await queryDB(`
-    SELECT keyword FROM keywords
-    LEFT JOIN subscriptions
-    ON subscriptions.keyword_id_fk = keywords.keyword_id
-    RIGHT JOIN emails
-    ON subscriptions.email_id_fk = emails.email_id
-    WHERE emails.email = ?;`, [email]);
-  
-  console.log(event['queryStringParameters']['email'])
-  console.log(email);
-  console.log(subscriptions);
-
-  if (subscriptions.length === 0) {
-    return jsonResponse(200, []);
-  } else {
-    return jsonResponse(200, subscriptions);
-  };
-};
-
 module.exports.subscribe = async (event) => {
   const keywords = filter('keywords', event['queryStringParameters']['keywords'])
   const email = decrypt(event['queryStringParameters']['email']);
@@ -323,6 +302,27 @@ module.exports.subscribe = async (event) => {
 
   return jsonResponse(200, response)
 }
+
+module.exports.getKeywords = async (event) => {
+  const email = decrypt(event['queryStringParameters']['email']);
+  const subscriptions = await queryDB(`
+    SELECT keyword FROM keywords
+    LEFT JOIN subscriptions
+    ON subscriptions.keyword_id_fk = keywords.keyword_id
+    RIGHT JOIN emails
+    ON subscriptions.email_id_fk = emails.email_id
+    WHERE emails.email = ?;`, [email]);
+  
+  console.log(event['queryStringParameters']['email'])
+  console.log(email);
+  console.log(subscriptions);
+
+  if (subscriptions.length === 0) {
+    return jsonResponse(200, []);
+  } else {
+    return jsonResponse(200, subscriptions);
+  };
+};
 
 module.exports.sendEmailConfirmation = async (event) => {
   const email = event.body.email
