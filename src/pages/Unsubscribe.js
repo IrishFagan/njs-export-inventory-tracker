@@ -12,6 +12,19 @@ export default function Unsubscribe() {
 			isChecked.map((checkbox, i) => i === index ? !checkbox : checkbox
 		))
 	}
+
+	const strip = (array, value) => {
+		return array.filter(item => item !== value);
+	}
+
+	const submitUnsubscription = () => {
+		var checkedIndex = isChecked.map((checkbox, index) => checkbox === true ? index : '');
+		checkedIndex = strip(checkedIndex, '');
+		console.log(checkedIndex);
+		var unsubKeywords = keywords.map((keyword, index) => checkedIndex.includes(index) ? keyword.keyword : '');
+		unsubKeywords = strip(unsubKeywords, '');
+		console.log(unsubKeywords);
+	}
 	
 	useEffect(() => {
 		const getKeywords = () => {
@@ -46,6 +59,9 @@ export default function Unsubscribe() {
 					</li>
 				)}
 			</ul>
+			<button onClick={() => submitUnsubscription()} >
+			Unsubscribe
+			</button>
 		</div>
 	)
 }
