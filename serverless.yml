@@ -51,6 +51,16 @@ functions:
                 email: true
                 keywords: true
                 hash: true
+  unsubscribeConfirm:
+    handler: handler.unsubscribeConfirm
+    events:
+      - http:
+          path: unsubscribe/confirm/
+          method: GET
+          request:
+            parameters:
+              email: true
+              keywords: true
   subscribe:
     handler: handler.subscribe
     events:
