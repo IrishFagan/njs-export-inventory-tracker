@@ -219,9 +219,10 @@ const getSubscriptionEmails = async (keyword) => {
 
 module.exports.unsubscribe = async (event) => {
   const email = decrypt(event['queryStringParameters']['email']);
-  const keywords = event['queryStringParameters']['keywords']
+  const keywords = filter('keywords', event['queryStringParameters']['keywords'])
 
   console.log(email)
+  console.log(keywords)
 
   for (let keyword of keywords) {
     await queryDB(`
