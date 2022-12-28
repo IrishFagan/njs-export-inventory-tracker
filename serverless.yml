@@ -45,6 +45,7 @@ functions:
       - http:
           path: unsubscribe/
           method: GET
+          cors: true
           request:
             parameters:
               querystrings:
