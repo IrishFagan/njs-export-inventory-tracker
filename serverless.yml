@@ -50,7 +50,6 @@ functions:
               querystrings:
                 email: true
                 keywords: true
-                hash: true
   subscribe:
     handler: handler.subscribe
     events:
