@@ -202,7 +202,7 @@ const escape = (input) => {
 
 const filter = (type, string) => {
   if (type === 'keywords') {
-    return string.split(',').filter(keyword => keyword.match(/^[a-z0-9]+$/i))
+    return string.split(',').filter(keyword => keyword.match(/^[a-z0-9.]+$/i))
   }
 }
 
