@@ -219,43 +219,23 @@ const getSubscriptionEmails = async (keyword) => {
 
 module.exports.unsubscribe = async (event) => {
   const email = decrypt(event['queryStringParameters']['email']);
-  const hash = event['queryStringParameters']['hash']
   const keywords = event['queryStringParameters']['keywords']
-  const params = {
-    TableName: 'UserHashTable',
-    IndexName: 'userHashIndex',
-    KeyConditionExpression: 'UserHash = :uh',
-    FilterExpression: '#timetolive >= :currentEpoch',
-    ExpressionAttributeValues: {
-      ':uh': parseInt(event['queryStringParameters']['hash']),
-      ':currentEpoch': Date.now() / 1000
-    },
-    ExpressionAttributeNames: {
-      '#timetolive': 'ttl'
-    }
-  }
 
   console.log(email)
 
-  const emailHash = await db.query(params).promise()
-
-  if(emailHash.Count) {
-    for (let keyword of keywords) {
-      await queryDB(`
-        DELETE subscriptions
-        FROM subscriptions
-        INNER JOIN emails
-        ON emails.email_id = subscriptions.email_id_fk
-        INNER JOIN keywords
-        ON keywords.keyword_id = subscriptions.keyword_id_fk
-        WHERE emails.email = ?
-        AND keywords.keyword = ?;`, [email, keyword]);
-    }
-    deleteFromDB('UserHashTable', emailHash.Items[0]);
-    return jsonResponse(200, 'Success')
-  } else {
-    return jsonResponse(200, 'Error')
+  for (let keyword of keywords) {
+    await queryDB(`
+      DELETE subscriptions
+      FROM subscriptions
+      INNER JOIN emails
+      ON emails.email_id = subscriptions.email_id_fk
+      INNER JOIN keywords
+      ON keywords.keyword_id = subscriptions.keyword_id_fk
+      WHERE emails.email = ?
+      AND keywords.keyword = ?;`, [email, keyword]);
   }
+
+  return jsonResponse(200, 'Success');
 }
 
 module.exports.subscribe = async (event) => {
