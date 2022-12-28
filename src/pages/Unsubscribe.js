@@ -24,6 +24,9 @@ export default function Unsubscribe() {
 		var unsubKeywords = keywords.map((keyword, index) => checkedIndex.includes(index) ? keyword.keyword : '');
 		unsubKeywords = strip(unsubKeywords, '');
 		console.log(unsubKeywords);
+		axios
+			.get(`https://api.njs.bike/unsubscribe?email=${queryParams.get('email')}&keywords=${unsubKeywords.join(',')}`)
+			.then(res => console.log(res.data.body))
 	}
 	
 	useEffect(() => {
