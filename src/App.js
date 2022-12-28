@@ -24,6 +24,10 @@ export default function App() {
           element={ <Unsubscribe /> }
         />
         <Route
+          path="/unsubscribe/confirm"
+          element={ <Unsubscribe /> }
+        />
+        <Route
           path="/subscribe"
           element={ <Subscribe /> }
         />
