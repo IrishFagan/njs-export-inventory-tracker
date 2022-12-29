@@ -185,7 +185,6 @@ const queryDB = (query, values = []) => {
     connection.query(query, values,async (err, res) => {
       if (err) {
         if (err.code !== 'ER_DUP_ENTRY') {
-          connection.end()
           console.log(err);
           reject(err);
         }
@@ -225,7 +224,7 @@ module.exports.unsubscribe = async (event) => {
   console.log(keywords)
 
   for (let keyword of keywords) {
-    await queryDB(`
+    let res = await queryDB(`
       DELETE subscriptions
       FROM subscriptions
       INNER JOIN emails
@@ -234,6 +233,7 @@ module.exports.unsubscribe = async (event) => {
       ON keywords.keyword_id = subscriptions.keyword_id_fk
       WHERE emails.email = ?
       AND keywords.keyword = ?;`, [email, keyword]);
+    console.log(res);
   }
 
   return jsonResponse(200, 'Success');
@@ -275,12 +275,12 @@ module.exports.subscribe = async (event) => {
         (SELECT keyword_id FROM keywords WHERE keyword = ?),
         (SELECT email_id FROM emails WHERE email = ?));`, [keyword, email]);
     }
-    connection.end();
     deleteFromDB('UserHashTable', emailHash.Items[0]);
   } else {
     response = 'Error'
   }
 
+  connection.end()
   return jsonResponse(200, response)
 }
 
