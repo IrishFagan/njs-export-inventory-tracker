@@ -24,6 +24,8 @@ export default function Home() {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
+    setEmail("");
+    setKeywords("");
     axios
       .post(`https://kuwsmvuodh.execute-api.us-west-2.amazonaws.com/dev/update`,
         {
@@ -31,8 +33,6 @@ export default function Home() {
           keywords: keywords
         })
       .then(res => {
-        setEmail("");
-        setKeywords("");
         console.log(res);
       })
       .catch(err => console.log(err));
