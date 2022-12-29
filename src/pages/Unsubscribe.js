@@ -17,6 +17,10 @@ export default function Unsubscribe() {
 		return array.filter(item => item !== value);
 	}
 
+	const checkAll = () => {
+		setIsChecked([...isChecked].fill(true))
+	}
+
 	const handleUnsubscribe = () => {
 		var checkedIndex = isChecked.map((checkbox, index) => checkbox === true ? index : '');
 		checkedIndex = strip(checkedIndex, '');
@@ -53,7 +57,7 @@ export default function Unsubscribe() {
 					keywords.map((keyword, index) =>
 					<li className="align-left" key={index}>
 						<input
-							value={isChecked[index]}
+							checked={isChecked[index]}
 							type="checkbox"
 							onChange={() => handleOnChange(index)}
 						/>
@@ -63,6 +67,9 @@ export default function Unsubscribe() {
 			</ul>
 			<button onClick={() => handleUnsubscribe()} >
 			Unsubscribe
+			</button>
+			<button onClick={() => {checkAll()}} >
+			Check All
 			</button>
 		</div>
 	)
