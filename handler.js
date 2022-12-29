@@ -320,7 +320,8 @@ Please click the appropriate link below as well to confirm the addition of these
 https://www.njs.bike/subscribe?hash=${hash}&keywords=${keywords}&email=${encrypt(email)}
 
 
-To no longer recieve notifications about new listings please click the link below.
+To view current keyword subscriptions as well as unsubscribe from
+certain keywords please click the link below:
 
 https://www.njs.bike/unsubscribe/?email=${encrypt(email)}`,
     `njs.bike - Keyword Confirmation`
@@ -358,7 +359,8 @@ module.exports.checkKeywordSubscription = async (event) => {
 Head on over to https://njs.bike to see what was recently listed!
 
 
-To no longer recieve notifications about new listings please click the link below.
+To view current keyword subscriptions as well as unsubscribe from
+certain keywords please click the link below:
 
 https://www.njs.bike/unsubscribe/?email=${encrypt(email)}`,
       'njs.bike - Keyword Subscription'
