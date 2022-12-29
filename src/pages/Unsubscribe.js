@@ -29,7 +29,6 @@ export default function Unsubscribe() {
 		axios
 			.get(`https://api.njs.bike/unsubscribe?email=${queryParams.get('email')}&keywords=${unsubKeywords.join(',')}`)
 			.then(res => console.log(res.data.body))
-		window.location.reload(false);
 	}
 	
 	useEffect(() => {
