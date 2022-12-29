@@ -17,7 +17,7 @@ export default function Unsubscribe() {
 		return array.filter(item => item !== value);
 	}
 
-	const submitUnsubscription = () => {
+	const handleUnsubscribe = () => {
 		var checkedIndex = isChecked.map((checkbox, index) => checkbox === true ? index : '');
 		checkedIndex = strip(checkedIndex, '');
 		var unsubKeywords = keywords.map((keyword, index) => checkedIndex.includes(index) ? keyword.keyword : '');
@@ -61,7 +61,7 @@ export default function Unsubscribe() {
 					</li>
 				)}
 			</ul>
-			<button onClick={() => submitUnsubscription()} >
+			<button onClick={() => handleUnsubscribe()} >
 			Unsubscribe
 			</button>
 		</div>
