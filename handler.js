@@ -296,7 +296,9 @@ module.exports.getKeywords = async (event) => {
   console.log(email);
   console.log(subscriptions);
 
-  if (subscriptions.length === 0) {
+  console.log(subscriptions[0].keyword);
+
+  if (subscriptions.length === 0 || subscriptions[0].keyword === null) {
     return jsonResponse(200, []);
   } else {
     return jsonResponse(200, subscriptions);
