@@ -280,7 +280,6 @@ module.exports.subscribe = async (event) => {
     response = 'Error'
   }
 
-  connection.end()
   return jsonResponse(200, response)
 }
 
@@ -352,8 +351,9 @@ module.exports.checkKeywordSubscription = async (event) => {
   console.log(emails);
 
   for (let email of emails) {
-    await sendEmail(
-      email,
+    if (email !== null) {
+      await sendEmail(
+        email,
 `An item keyword you've subscribed to has been listed on njs-export!
 
 Head on over to https://njs.bike to see what was recently listed!
@@ -364,7 +364,8 @@ certain keywords please click the link below:
 
 https://www.njs.bike/unsubscribe/?email=${encrypt(email)}`,
       'njs.bike - Keyword Subscription'
-    )
+      )
+    }
   }
 }
 
