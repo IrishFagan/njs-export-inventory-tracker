@@ -21,6 +21,14 @@ export default function Unsubscribe() {
 		setIsChecked([...isChecked].fill(true))
 	}
 
+	const clearSubscriptionList = (status, unsubscribeKeywords) => {
+		console.log(status, unsubscribeKeywords)
+		if (status === 'Success') {
+			const clearedList = keywords.filter(keyword => !unsubscribeKeywords.includes(keyword.keyword))
+			setKeywords(clearedList);
+		}
+	}
+
 	const handleUnsubscribe = () => {
 		var checkedIndex = isChecked.map((checkbox, index) => checkbox === true ? index : '');
 		checkedIndex = strip(checkedIndex, '');
@@ -28,8 +36,11 @@ export default function Unsubscribe() {
 		unsubKeywords = strip(unsubKeywords, '');
 		axios
 			.get(`https://api.njs.bike/unsubscribe?email=${queryParams.get('email')}&keywords=${unsubKeywords.join(',')}`)
-			.then(res => console.log(res.data.body))
+			.then(res => {
+				clearSubscriptionList(res.data.body, unsubKeywords);
+			})
 	}
+
 	
 	useEffect(() => {
 		const getKeywords = () => {
