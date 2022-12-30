@@ -275,12 +275,11 @@ module.exports.subscribe = async (event) => {
         (SELECT keyword_id FROM keywords WHERE keyword = ?),
         (SELECT email_id FROM emails WHERE email = ?));`, [keyword, email]);
     }
-    deleteFromDB('UserHashTable', emailHash.Items[0]);
+    await deleteFromDB('UserHashTable', emailHash.Items[0]);
+    return jsonResponse(200, "Success - Keywords have been added to subscriptions");
   } else {
-    response = 'Error'
+    return jsonResponse(200, "Error - Hash expired. Please try again")
   }
-
-  return jsonResponse(200, response)
 }
 
 module.exports.getKeywords = async (event) => {
