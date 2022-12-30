@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 
@@ -10,9 +10,11 @@ export default function Subscribe() {
 	const keywords = queryParams.get('keywords');
 	const hash = queryParams.get('hash');
 
-	axios
-		.get(`https://api.njs.bike/subscribe?email=${email}&hash=${hash}&keywords=${keywords}`)
-		.then(res => setStatus(res.data.body));
+	useEffect(() => {
+		axios
+			.get(`https://api.njs.bike/subscribe?email=${email}&hash=${hash}&keywords=${keywords}`)
+			.then(res => setStatus(res.data.body));
+	}, [])
 
 	return (
 		<div>
