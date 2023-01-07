@@ -243,6 +243,7 @@ module.exports.subscribe = async (event) => {
   const keywords = filter('keywords', event['queryStringParameters']['keywords'])
   const email = decrypt(event['queryStringParameters']['email']);
   const hash = event['queryStringParameters']['hash'];
+  const forbiddenParams = [null, 'null', '', ' ']
 
   var response = 'Success';
 
@@ -265,6 +266,10 @@ module.exports.subscribe = async (event) => {
   console.log(event['queryStringParameters']['email'])
   console.log(email);
   console.log(keywords);
+
+  if (forbiddenParams.includes(email)) {
+    return jsonResponse(200, "Error - Invalid parameters. Please fill out the subscription form again")
+  }
 
   if (emailHash.Count) {
     for (let keyword of keywords) {
