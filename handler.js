@@ -25,6 +25,9 @@ const encrypt = (string) => {
 }
 
 const decrypt = (string) => {
+  if (string === null) {
+    return;
+  }
   var decoded = crypto.enc.Hex.parse(string).toString(crypto.enc.Base64);
   return crypto.AES.decrypt(decoded, process.env.CRYPTO_SECRET).toString(crypto.enc.Utf8);
 }
@@ -200,6 +203,9 @@ const escape = (input) => {
 }
 
 const filter = (type, string) => {
+  if (string === null) {
+    return;
+  }
   if (type === 'keywords') {
     return string.split(',').filter(keyword => keyword.match(/^[a-z0-9.]+$/i))
   }
@@ -244,6 +250,10 @@ module.exports.subscribe = async (event) => {
   const email = decrypt(event['queryStringParameters']['email']);
   const hash = event['queryStringParameters']['hash'];
   const forbiddenParams = [null, 'null', '', ' ']
+  
+  if (forbiddenParams.includes(email)) {
+    return jsonResponse(200, "Error - Invalid parameters. Please fill out the subscription form again")
+  }
 
   var response = 'Success';
 
@@ -267,9 +277,6 @@ module.exports.subscribe = async (event) => {
   console.log(email);
   console.log(keywords);
 
-  if (forbiddenParams.includes(email)) {
-    return jsonResponse(200, "Error - Invalid parameters. Please fill out the subscription form again")
-  }
 
   if (emailHash.Count) {
     for (let keyword of keywords) {
