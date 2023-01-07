@@ -14,9 +14,13 @@ export default function Subscribe() {
 		setKeywords(queryParams.get('keywords'));
 		setHash(queryParams.get('hash'));
 
-		axios
-			.get(`https://api.njs.bike/subscribe?email=${email}&hash=${hash}&keywords=${keywords}`)
-			.then(res => setStatus(res.data.body));
+		if(keywords !== null &&
+			 email !== null &&
+			 hash !== null) {
+			axios
+				.get(`https://api.njs.bike/subscribe?email=${email}&hash=${hash}&keywords=${keywords}`)
+				.then(res => setStatus(res.data.body));
+		}
 	}, [])
 
 	return (
