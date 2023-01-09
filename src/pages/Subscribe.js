@@ -23,11 +23,21 @@ export default function Subscribe() {
 		}
 	}, [])
 
-	return (
-		<div>
-			{ !status ? <p className="flex justify-center">loading...</p> :
-			<h2>{ status }</h2>
-			}
-		</div>
-	)
+	if(keywords === null ||
+		 email === null ||
+		 hash === null) {
+		return (
+			<div>
+				<h2>Error - Invalid parameters. Please fill out the subscription form again</h2>
+			</div>
+		)
+	} else {
+		return (
+			<div>
+				{ !status ? <p className="flex justify-center">loading...</p> :
+				<h2>{ status }</h2>
+				}
+			</div>
+		)
+	}
 }
