@@ -4,19 +4,17 @@ import axios from 'axios';
 
 export default function Subscribe() {
 	const [queryParams] = useSearchParams();
-	const [email, setEmail] = useState(null);
-	const [keywords, setKeywords] = useState(null);
-	const [hash, setHash] = useState(null);
+	const [email] = useState(queryParams.get('email'));
+	const [keywords] = useState(queryParams.get('keywords'));
+	const [hash] = useState(queryParams.get('hash'));
 	const [status, setStatus] = useState(null);
 
 	useEffect(() => {
-		setEmail(queryParams.get('email'));
-		setKeywords(queryParams.get('keywords'));
-		setHash(queryParams.get('hash'));
 
 		if(keywords !== null &&
 			 email !== null &&
 			 hash !== null) {
+
 			axios
 				.get(`https://api.njs.bike/subscribe?email=${email}&hash=${hash}&keywords=${keywords}`)
 				.then(res => setStatus(res.data.body));
