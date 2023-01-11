@@ -279,10 +279,10 @@ module.exports.subscribe = async (event) => {
 
 
   if (emailHash.Count) {
+    await queryDB(`INSERT INTO emails (email) VALUES (?)`, [email]);
     for (let keyword of keywords) {
       console.log(keyword)
       await queryDB(`INSERT INTO keywords (keyword) VALUES (?)`, [keyword]);
-      await queryDB(`INSERT INTO emails (email) VALUES (email)`, [email]);
       await queryDB(`INSERT INTO subscriptions (keyword_id_fk, email_id_fk) VALUES (
         (SELECT keyword_id FROM keywords WHERE keyword = ?),
         (SELECT email_id FROM emails WHERE email = ?));`, [keyword, email]);
