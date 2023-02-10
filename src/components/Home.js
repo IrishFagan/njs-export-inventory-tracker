@@ -71,26 +71,6 @@ export default function Home() {
         componentName="Components"
         listingDate={listingDate}
       />
-      <div className="fixed bottom-0 inset-x-0 z-auto bg-stone-200 p-0 pb-4 border-t-2 border-black">
-        <h2 className="text-2xl italic no-underline m-3">Subscribe to Keywords</h2>
-        <form className="flex flex-col items-center" onSubmit={handleSubmit}>
-          <input className="border-2 border-black rounded text-center"
-            placeholder="Enter email"
-            type="text"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-          />
-          <br />
-          <input className="border-2 border-black rounded text-center"
-            placeholder="Enter keywords"
-            type="text"
-            value={keywords}
-            onChange={e => handleKeywords(e.target.value)}
-          />
-          <br />
-          <input className="border-2 border-black rounded-sm p-1" type="submit" />
-        </form>
-      </div>
     </div>
   )
 }
