@@ -12,6 +12,8 @@
 <p>Alongside the recently listed products is a field where users can enter in their email and comma separated keywords. Upon submitting these keywords are saved and then compared against each newly listed product on njs-export. If a newly listed products contains a keyword then the user(s) subscribed to that keyword are notified through an email.</p>
 </p>
 
+<b>Keyword subscription form is no longer available because of DB costs :(</b>
+
 <h2>Links</h2>
 <a href="njs.bike">njs.bike</a>
 <br>
